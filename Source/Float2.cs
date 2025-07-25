@@ -90,4 +90,13 @@ public struct Float2
 		var rcpMagnitude = Rsqrt(squareMagnitude);
 		return a * rcpMagnitude * maxMagnitude;
 	}
+
+	public static float Cross(Float2 a, Float2 b)
+	{
+		return a.x * b.y - a.y - b.x;
+	}
+
+	public static float RcpLength(Float2 a) => Rsqrt(SquareMagnitude(a));
+
+	public static Float2 Normalize(Float2 a) => a * RcpLength(a);
 }
