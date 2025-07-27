@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,5 +72,43 @@ public static class Geometry
 		var c = Vector3.Dot(start, start) - radius * radius;
 
 		return SolveQuadraticEquation(a, b, c, out intersections);
+	}
+
+	public static float TanHalfFov(float fov) => Tan(0.5f * fov);
+
+	public static float TanHalfFovDegrees(float fov) => TanHalfFov(Radians(fov));
+
+	public static Float3 GetFrustumCorner(float tanHalfFov, float aspect, float near, float far, int index)
+	{
+		var nearHeight = 2 * near * tanHalfFov;
+		var nearWidth = nearHeight * aspect;
+		var farHeight = 2 * far * tanHalfFov;
+		var farWidth = farHeight * aspect;
+
+		return index switch
+		{
+			0 => new(-nearWidth / 2, -nearHeight / 2, near),// Bottom left
+			1 => new(-nearWidth / 2, nearHeight / 2, near),// Top left
+			2 => new(nearWidth / 2, nearHeight / 2, near),// Top right
+			3 => new(nearWidth / 2, -nearHeight / 2, near),// Bottom-right
+			4 => new(-farWidth / 2, -farHeight / 2, far),// Bottom left
+			5 => new(-farWidth / 2, farHeight / 2, far),// Top left
+			6 => new(farWidth / 2, farHeight / 2, far),// Top right
+			7 => new(farWidth / 2, -farHeight / 2, far),// Bottom right
+			_ => throw new ArgumentOutOfRangeException(index.ToString()),
+		};
+	}
+
+	public static Bounds GetFrustumBounds(float tanHalfFov, float aspect, float near, float far, Float4x4 matrix)
+	{
+		Bounds bounds = default;
+		for (var i = 0; i < 8; i++)
+		{
+			var frustumPoint = GetFrustumCorner(tanHalfFov, aspect, near, far, i);
+			var localPoint = matrix.MultiplyPoint(frustumPoint);
+			bounds = i == 0 ? new Bounds(localPoint, Float3.Zero) : bounds.Encapsulate(localPoint);
+		}
+
+		return bounds;
 	}
 }

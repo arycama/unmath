@@ -22,13 +22,12 @@ public struct Line2D
 	public Float2 cb => new(c, b);
 	public Float2 cc => new(c, c);
 
-	/// <summary> Constructrs </summary>
-	public Line2D(Float2 a, Float2 b) : this(a.y - b.y, b.x - a.x, Float2.Cross(a, b))
+	public Line2D(Float2 a, Float2 b) : this(b.y - a.y, a.x - b.x, Float2.Cross(b - a, a))
 	{
 	}
 
 	public float DistanceToPoint(Float2 p)
 	{
-		return (a * p.x + b * p.y + c) / Float2.Magnitude(ab);
+		return (a * p.x + b * p.y + c) * Float2.RcpMagnitude(ab);
 	}
 }

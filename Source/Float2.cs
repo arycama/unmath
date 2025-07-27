@@ -5,26 +5,26 @@ using static Math;
 [Serializable]
 public struct Float2
 {
-    public float x, y;
+	public float x, y;
 
-    public Float2(float x, float y)
-    {
-        this.x = x;
-        this.y = y;
-    }
+	public Float2(float x, float y)
+	{
+		this.x = x;
+		this.y = y;
+	}
 
 	public static Float2 Zero => new(0, 0);
 
-    public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
+	public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
 
-    public static implicit operator Vector2(Float2 a) => new(a.x, a.y);
+	public static implicit operator Vector2(Float2 a) => new(a.x, a.y);
 
 	public static Float2 operator -(Float2 a) => new(-a.x, -a.y);
 
 	public static Float2 operator +(Float2 a, Float2 b) => new(a.x + b.x, a.y + b.y);
-    public static Float2 operator -(Float2 a, Float2 b) => new(a.x - b.x, a.y - b.y);
-    public static Float2 operator *(Float2 a, Float2 b) => new(a.x * b.x, a.y * b.y);
-    public static Float2 operator /(Float2 a, Float2 b) => new(a.x / b.x, a.y / b.y);
+	public static Float2 operator -(Float2 a, Float2 b) => new(a.x - b.x, a.y - b.y);
+	public static Float2 operator *(Float2 a, Float2 b) => new(a.x * b.x, a.y * b.y);
+	public static Float2 operator /(Float2 a, Float2 b) => new(a.x / b.x, a.y / b.y);
 
 	public static Float2 operator *(Float2 a, float b) => new(a.x * b, a.y * b);
 	public static Float2 operator *(float a, Float2 b) => new(a * b.x, a * b.y);
@@ -93,10 +93,13 @@ public struct Float2
 
 	public static float Cross(Float2 a, Float2 b)
 	{
-		return a.x * b.y - a.y - b.x;
+		return a.x * b.y - a.y * b.x;
 	}
 
 	public static float RcpLength(Float2 a) => Rsqrt(SquareMagnitude(a));
 
 	public static Float2 Normalize(Float2 a) => a * RcpLength(a);
+	public static float Distance(Float2 p0, Float2 p1) => Magnitude(p1 - p0);
+
+	public static float SignedAngle(Float2 from, Float2 to) => Angle(from, to) * Sign(Cross(from, to));
 }
