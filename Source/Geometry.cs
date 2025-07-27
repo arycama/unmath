@@ -78,13 +78,14 @@ public static class Geometry
 
 	public static float TanHalfFovDegrees(float fov) => TanHalfFov(Radians(fov));
 
-	public static Float3 GetFrustumCorner(float tanHalfFov, float aspect, float near, float far, int index)
+	public static Float3 GetFrustumCorner(float tanHalfFov, float aspect, float near, float far, FrustumCorner frustumCorner)
 	{
 		var nearHeight = 2 * near * tanHalfFov;
 		var nearWidth = nearHeight * aspect;
 		var farHeight = 2 * far * tanHalfFov;
 		var farWidth = farHeight * aspect;
 
+		var index = (int)frustumCorner;
 		return index switch
 		{
 			0 => new(-nearWidth / 2, -nearHeight / 2, near),// Bottom left
@@ -102,7 +103,7 @@ public static class Geometry
 	public static Bounds GetFrustumBounds(float tanHalfFov, float aspect, float near, float far, Float4x4 matrix)
 	{
 		Bounds bounds = default;
-		for (var i = 0; i < 8; i++)
+		for (var i = FrustumCorner.Start; i < FrustumCorner.End; i++)
 		{
 			var frustumPoint = GetFrustumCorner(tanHalfFov, aspect, near, far, i);
 			var localPoint = matrix.MultiplyPoint(frustumPoint);
@@ -111,4 +112,18 @@ public static class Geometry
 
 		return bounds;
 	}
+}
+
+public enum FrustumCorner
+{
+	Start,
+	BottomLeftNear = Start,
+	TopLeftNear,
+	TopRightNear,
+	BottomRightNear,
+	BottomLeftFar,
+	TopLeftFar,
+	TopRightFar,
+	BottomRightFar,
+	End
 }

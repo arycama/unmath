@@ -11,6 +11,4 @@ public struct Ray2D
 		this.origin = origin;
 		this.direction = direction;
 	}
-
-
 }
