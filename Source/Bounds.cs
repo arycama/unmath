@@ -34,6 +34,12 @@ public struct Bounds
 		return result.Encapsulate(bounds.center + bounds.extents);
 	}
 
+	/// <summary> Shrinks a bounds to the minimum of it and another bounds </summary>
+	public Bounds Shrink(Bounds bounds)
+	{
+		return MinMax(Float3.Max(Min, bounds.Min), Float3.Min(Max, bounds.Max));
+	}
+
 	/// <summary> Transforms the corners of this bounds by a matrix </summary>
 	public readonly Bounds Transform(Matrix4x4 matrix)
 	{
