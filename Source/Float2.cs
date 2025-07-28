@@ -13,10 +13,13 @@ public struct Float2
 		this.y = y;
 	}
 
+	public Float2 yx => new(y, x);
+
 	public static Float2 Zero => new(0, 0);
 
-	public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
+	public static implicit operator Float3(Float2 a) => new(a.x, a.y, 0);
 
+	public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
 	public static implicit operator Vector2(Float2 a) => new(a.x, a.y);
 
 	public static Float2 operator -(Float2 a) => new(-a.x, -a.y);

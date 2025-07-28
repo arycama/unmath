@@ -5,14 +5,14 @@ using static Float3;
 
 public struct Float4x4
 {
-	public Float4 column0, column1, column2, column3;
+	public Float4 c0, c1, c2, c3;
 
 	public Float4x4(Float4 column0, Float4 column1, Float4 column2, Float4 column3)
 	{
-		this.column0 = column0;
-		this.column1 = column1;
-		this.column2 = column2;
-		this.column3 = column3;
+		this.c0 = column0;
+		this.c1 = column1;
+		this.c2 = column2;
+		this.c3 = column3;
 	}
 
 	public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
@@ -38,54 +38,61 @@ public struct Float4x4
 		return matrix;
 	}
 
-	public float m00 => column0.x;
-	public float m10 => column0.y;
-	public float m20 => column0.z;
-	public float m30 => column0.w;
-	public float m01 => column1.x;
-	public float m11 => column1.y;
-	public float m21 => column1.z;
-	public float m31 => column1.w;
-	public float m02 => column2.x;
-	public float m12 => column2.y;
-	public float m22 => column2.z;
-	public float m32 => column2.w;
-	public float m03 => column3.x;
-	public float m13 => column3.y;
-	public float m23 => column3.z;
-	public float m33 => column3.w;
+	public readonly float m00 => c0.x;
+	public readonly float m10 => c0.y;
+	public readonly float m20 => c0.z;
+	public readonly float m30 => c0.w;
 
-	public Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
+	public readonly float m01 => c1.x;
+	public readonly float m11 => c1.y;
+	public readonly float m21 => c1.z;
+	public readonly float m31 => c1.w;
 
-	public static implicit operator Matrix4x4(Float4x4 a) => new(a.column0, a.column1, a.column2, a.column3);
+	public readonly float m02 => c2.x;
+	public readonly float m12 => c2.y;
+	public readonly float m22 => c2.z;
+	public readonly float m32 => c2.w;
+
+	public readonly float m03 => c3.x;
+	public readonly float m13 => c3.y;
+	public readonly float m23 => c3.z;
+	public readonly float m33 => c3.w;
+
+	public readonly float Determinant
+	{
+		get
+		{
+			return Matrix4x4.Determinant(this);
+		}
+	}
+
+	public readonly Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
+
+	public readonly Matrix4x4 Inverse
+	{
+		get
+		{
+			return Matrix4x4.Inverse(this);
+		}
+	}
+
+	public static implicit operator Matrix4x4(Float4x4 a) => new(a.c0, a.c1, a.c2, a.c3);
 
 	public static implicit operator Float4x4(Matrix4x4 a) => new(a.GetColumn(0), a.GetColumn(1), a.GetColumn(2), a.GetColumn(3));
 
-	public Float3 MultiplyVector(Float3 vector)
-	{
-		Float3 result;
-		result.x = m00 * vector.x + m01 * vector.y + m02 * vector.z;
-		result.y = m10 * vector.x + m11 * vector.y + m12 * vector.z;
-		result.z = m20 * vector.x + m21 * vector.y + m22 * vector.z;
-		return result;
-	}
+	public readonly Float3 MultiplyVector(Float3 a) => a.x * c0.xyz + a.y * c1.xyz + a.z * c2.xyz;
 
-	public Float3 MultiplyPoint3x4(Float3 point)
-	{
-		Float3 result;
-		result.x = m00 * point.x + m01 * point.y + m02 * point.z + m03;
-		result.y = m10 * point.x + m11 * point.y + m12 * point.z + m13;
-		result.z = m20 * point.x + m21 * point.y + m22 * point.z + m23;
-		return result;
-	}
+	public readonly Float3 MultiplyPoint3x4(Float3 a) => MultiplyVector(a) + c3.xyz;
 
-	public Float3 MultiplyPoint(Float3 point)
-	{
-		Float3 result;
-		result.x = m00 * point.x + m01 * point.y + m02 * point.z + m03;
-		result.y = m10 * point.x + m11 * point.y + m12 * point.z + m13;
-		result.z = m20 * point.x + m21 * point.y + m22 * point.z + m23;
-		var num = m30 * point.x + m31 * point.y + m32 * point.z + m33;
-		return result * Rcp(num);
-	}
+	public readonly Float4 MultiplyPoint(Float3 a) => a.x * c0 + a.y * c1 + a.z * c2 + c3;
+
+	public readonly Float3 MultiplyPointProj(Float3 a) => MultiplyPoint(a).PerspectiveDivide().xyz;
+
+	public readonly Float4x4 Mul(Float4x4 b) => new
+	(
+		c0 * b.m00 + c1 * b.m10 + c2 * b.m20 + c3 * b.m30,
+		c0 * b.m01 + c1 * b.m11 + c2 * b.m21 + c3 * b.m31,
+		c0 * b.m02 + c1 * b.m12 + c2 * b.m22 + c3 * b.m32,
+		c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
+	);
 }

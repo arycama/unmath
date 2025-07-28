@@ -106,7 +106,7 @@ public static class Geometry
 		for (var i = FrustumCorner.Start; i < FrustumCorner.End; i++)
 		{
 			var frustumPoint = GetFrustumCorner(tanHalfFov, aspect, near, far, i);
-			var localPoint = matrix.MultiplyPoint(frustumPoint);
+			var localPoint = matrix.MultiplyPointProj(frustumPoint);
 			bounds = i == 0 ? new Bounds(localPoint, Float3.Zero) : bounds.Encapsulate(localPoint);
 		}
 

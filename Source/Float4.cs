@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Math;
 
 public struct Float4
 {
@@ -21,6 +22,8 @@ public struct Float4
 	public Float4 wwww => new(w, w, w, w);
 	public Float4 yzxw => new(y, z, x, w);
 
+	public static Float4 operator +(Float4 a, Float4 b) => new(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+	public static Float4 operator *(float a, Float4 b) => new(a * b.x, a * b.y, a * b.z, a * b.w);
 	public static Float4 operator *(Float4 a, float b) => new(a.x * b, a.y * b, a.z * b, a.w * b);
 	public static Float4 operator *(Float4 a, Float4 b) => new(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 
@@ -29,4 +32,6 @@ public struct Float4
 	public static implicit operator Float4(Vector4 a) => new(a.x, a.y, a.z, a.w);
 
 	public static float Csum(Float4 a) => (a.x + a.y) + (a.z + a.w);
+
+	public Float4 PerspectiveDivide() => new(xyz * Rcp(w), w);
 }

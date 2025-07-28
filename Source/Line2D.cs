@@ -35,4 +35,10 @@ public struct Line2D
 	{
 		return -(Float2.Dot(ab, ray.origin) + c) / Float2.Dot(ab, ray.direction);
 	}
+
+	public Float2 IntersectRay(Ray2D ray)
+	{
+		return ray.direction * DistanceAlongRay(ray) + ray.origin;
+	}
 }
+
