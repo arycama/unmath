@@ -31,6 +31,8 @@ public struct Line2D
 		return (a * p.x + b * p.y + c) * Float2.RcpMagnitude(ab);
 	}
 
+	public Float2 ClosestPoint(Float2 p) => p - ab * DistanceToPoint(p);
+
 	public float DistanceAlongRay(Ray2D ray)
 	{
 		return -(Float2.Dot(ab, ray.origin) + c) / Float2.Dot(ab, ray.direction);

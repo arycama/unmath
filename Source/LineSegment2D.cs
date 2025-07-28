@@ -8,6 +8,8 @@
 		this.b = b;
 	}
 
+	public float Magnitude => Float2.Distance(a, b);
+
 	public bool DistanceAlongRay(Ray2D ray, out float distance)
 	{
 		distance = new Line2D(a, b).DistanceAlongRay(ray);
