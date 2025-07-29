@@ -22,6 +22,9 @@ public struct Line2D
 	public Float2 cb => new(c, b);
 	public Float2 cc => new(c, c);
 
+	/// <summary> Line defined by a direction </summary>
+	public Line2D(Float2 dir) : this() { }
+
 	public Line2D(Float2 a, Float2 b) : this(b.y - a.y, a.x - b.x, Float2.Cross(b - a, a))
 	{
 	}
@@ -29,6 +32,14 @@ public struct Line2D
 	public float DistanceToPoint(Float2 p)
 	{
 		return (a * p.x + b * p.y + c) * Float2.RcpMagnitude(ab);
+	}
+
+	public float DistanceToClosestPoint(Float2 p)
+	{
+		var closestPoint = ClosestPoint(p);
+		var origin = new Float2(0, -c / b); // Or another point on the line
+		var direction = Float2.Normalize(new Float2(-b, a));
+		return Float2.Dot(closestPoint - origin, direction);
 	}
 
 	public Float2 ClosestPoint(Float2 p) => p - ab * DistanceToPoint(p);
