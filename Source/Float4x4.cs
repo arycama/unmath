@@ -68,7 +68,7 @@ public struct Float4x4
 
 	public readonly Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
 
-	public readonly Matrix4x4 Inverse
+	public readonly Float4x4 Inverse
 	{
 		get
 		{
