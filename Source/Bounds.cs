@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Math;
 
 public struct Bounds
 {
@@ -38,6 +39,50 @@ public struct Bounds
 	public Bounds Shrink(Bounds bounds)
 	{
 		return MinMax(Float3.Max(Min, bounds.Min), Float3.Min(Max, bounds.Max));
+	}
+
+	/// <summary> Intersects a ray against this bounding box and returns whether it hits, and the distance to the first and second hit </summary>
+	public bool IntersectRay(Ray3D ray, out float t0, out float t1)
+	{
+		var invdir = ray.direction.Rcp;
+
+		var sign0 = (invdir.x < 0) ? 1 : 0;
+		var sign1 = (invdir.y < 0) ? 1 : 0;
+		var sign2 = (invdir.z < 0) ? 1 : 0;
+
+		// TODO: Optimize
+		var bounds = new Float3[2]
+		{
+			Min, Max
+		};
+
+		float tymin, tymax, tzmin, tzmax;
+
+		t0 = (bounds[sign0].x - ray.origin.x) * invdir.x;
+		t1 = (bounds[1 - sign0].x - ray.origin.x) * invdir.x;
+		tymin = (bounds[sign1].y - ray.origin.y) * invdir.y;
+		tymax = (bounds[1 - sign1].y - ray.origin.y) * invdir.y;
+
+		if ((t0 > tymax) || (tymin > t1))
+			return false;
+
+		if (tymin > t0)
+			t0 = tymin;
+		if (tymax < t1)
+			t1 = tymax;
+
+		tzmin = (bounds[sign2].z - ray.origin.z) * invdir.z;
+		tzmax = (bounds[1 - sign2].z - ray.origin.z) * invdir.z;
+
+		if ((t0 > tzmax) || (tzmin > t1))
+			return false;
+
+		if (tzmin > t0)
+			t0 = tzmin;
+		if (tzmax < t1)
+			t1 = tzmax;
+
+		return true;
 	}
 
 	/// <summary> Transforms the corners of this bounds by a matrix </summary>

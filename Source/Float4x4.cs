@@ -95,4 +95,6 @@ public struct Float4x4
 		c0 * b.m02 + c1 * b.m12 + c2 * b.m22 + c3 * b.m32,
 		c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
 	);
+
+	public static Float4x4 TRS(Float3 pos, Quaternion q, Float3 s) => Matrix4x4.TRS(pos, q, s);
 }

@@ -56,6 +56,8 @@ public struct Float3 : IEquatable<Float3>
 	public static Float3 Forward => new(0, 0, 1);
 	public static Float3 Back => new(0, 0, -1);
 
+	public static implicit operator Float3(float a) => new(a, a, a);
+
 	public static implicit operator Float3(Vector3 a) => new(a.x, a.y, a.z);
 
 	public static implicit operator Vector3(Float3 a) => new(a.x, a.y, a.z);
@@ -142,7 +144,6 @@ public struct Float3 : IEquatable<Float3>
 	//public static Float3 Select(Bool3 c, Float3 a, Float3 b) => Float3(c.x ? a.x : b.x, c.y ? a.y : b.y, c.z ? a.z : b.z);
 
 	// Common math
-	public static Float3 Abs(Float3 a) => new(Math.Abs(a.x), Math.Abs(a.y), Math.Abs(a.z));
 	public static Float3 Square(Float3 a) => a * a;
 	public static Float3 Sqrt(Float3 a) => new(Math.Sqrt(a.x), Math.Sqrt(a.y), Math.Sqrt(a.z));
 	public static Float3 Lerp(Float3 a, Float3 b, float t) => new(Math.Lerp(a.x, b.x, t), Math.Lerp(a.y, b.y, t), Math.Lerp(a.z, b.z, t));
@@ -163,6 +164,14 @@ public struct Float3 : IEquatable<Float3>
 	public static float Magnitude(Float3 a) => Math.Sqrt(SquareMagnitude(a));
 
 	public static float Distance(Float3 a, Float3 b) => Magnitude(b - a);
+
+	public Float3 Abs => new(Math.Abs(x), Math.Abs(y), Math.Abs(z));
+
+	public float MinComponent => Math.Min(x, Math.Min(y, z));
+
+	public float MaxComponent => Math.Max(x, Math.Max(y, z));
+
+	public Float3 Rcp => new(Math.Rcp(x), Math.Rcp(y), Math.Rcp(z));
 
 	public static Float3 Normalize(Float3 a) => a * Rsqrt(SquareMagnitude(a));
 	public static Float3 FromTo(Float3 a, Float3 b) => Normalize(b - a);
@@ -253,4 +262,6 @@ public struct Float3 : IEquatable<Float3>
 	{
 		x = this.x; y = this.y; z = this.z;
 	}
+
+	public Float3 Clamp(Float3 min, Float3 max) => Min(max, Max(min, this));
 }
