@@ -9,10 +9,10 @@ public struct Float4x4
 
 	public Float4x4(Float4 column0, Float4 column1, Float4 column2, Float4 column3)
 	{
-		this.c0 = column0;
-		this.c1 = column1;
-		this.c2 = column2;
-		this.c3 = column3;
+		c0 = column0;
+		c1 = column1;
+		c2 = column2;
+		c3 = column3;
 	}
 
 	public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }

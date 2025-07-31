@@ -53,5 +53,17 @@ public struct Line2D
 	{
 		return ray.direction * DistanceAlongRay(ray) + ray.origin;
 	}
+
+	public Float2 IntersectLine(Line2D line)
+	{
+		// Calculate the denominator for the intersection formula
+		var denominator = a * line.b - line.a * b;
+
+		// Calculate intersection coordinates
+		var x = (b * line.c - line.b * c) / denominator;
+		var y = (line.a * c - a * line.c) / denominator;
+
+		return new Float2(x, y);
+	}
 }
 
