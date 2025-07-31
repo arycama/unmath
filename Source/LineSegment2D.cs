@@ -44,5 +44,22 @@
 		var t = Float2.Dot(point - a, delta) / segmentLengthSquared;
 		return t >= 0.0f && t <= 1.0f;
 	}
+
+	public bool IntersectLine(Line2D line, out Float2 point)
+	{
+		// Represent the segment as a line (Ax + By + C = 0)
+		var segmentDir = b - a;
+		var segmentLine = new Line2D(a, b);
+
+		// Find intersection between the two lines
+		point = segmentLine.IntersectLine(line);
+
+		// Check if the intersection point lies within the segment bounds
+		var delta = b - a;
+		var segmentLengthSquared = Float2.SquareMagnitude(delta);
+		var t = Float2.Dot(point - a, delta) / segmentLengthSquared;
+
+		return t >= 0.0f && t <= 1.0f;
+	}
 }
 
