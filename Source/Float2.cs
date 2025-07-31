@@ -17,6 +17,9 @@ public struct Float2
 
 	public static Float2 Zero => new(0, 0);
 
+	public static bool operator ==(Float2 a, Float2 b) => a.x == b.x && a.y == b.y;
+	public static bool operator !=(Float2 a, Float2 b) => a.x != b.x || a.y != b.y;
+
 	public static implicit operator Float3(Float2 a) => new(a.x, a.y, 0);
 
 	public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
@@ -105,4 +108,5 @@ public struct Float2
 	public static float Distance(Float2 p0, Float2 p1) => Magnitude(p1 - p0);
 
 	public static float SignedAngle(Float2 from, Float2 to) => Angle(from, to) * Sign(Cross(from, to));
+	public Float2 Clamp(Float2 min, Float2 max) => new(Math.Clamp(x, min.x, max.x), Math.Clamp(y, min.y, max.y));
 }
