@@ -18,9 +18,33 @@ public struct Bounds
 
 	public static Bounds MinMax(Float3 min, Float3 max) => new(0.5f * (max + min), 0.5f * (max - min));
 
-	public readonly Float3 Min => center - extents;
+	public Float3 Min
+	{
+		get
+		{
+			return center - extents;
+		}
+		set
+		{
+			var max = Max;
+			center = 0.5f * (max + value);
+			extents = 0.5f * (max - value);
+		}
+	}
 
-	public readonly Float3 Max => center + extents;
+	public Float3 Max
+	{
+		get
+		{
+			return center + extents;
+		}
+		set
+		{
+			var min = Min;
+			center = 0.5f * (value + min);
+			extents = 0.5f * (value - min);
+		}
+	}
 
 	public readonly Float3 Size => 2.0f * extents;
 
