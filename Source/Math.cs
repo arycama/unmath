@@ -35,6 +35,7 @@ public static partial class Math
 	public static int CeilToInt(float x) => (int)Ceil(x);
 	public static float Round(float x) => MathF.Round(x);
 	public static int RoundToInt(float x) => (int)Round(x);
+	public static float Snap(float value, float cellSize) => Floor(value / cellSize) * cellSize;
 
 	public static float DeltaAngle(float current, float target)
 	{
