@@ -16,6 +16,8 @@ public struct Bounds
 		return new Bounds(bounds.center, bounds.extents);
 	}
 
+	public static implicit operator UnityEngine.Bounds(Bounds bounds) => new(bounds.center, bounds.extents);
+
 	public static Bounds MinMax(Float3 min, Float3 max) => new(0.5f * (max + min), 0.5f * (max - min));
 
 	public Float3 Min
