@@ -32,4 +32,5 @@ public static partial class Math
 	}
 
 	public static int DivRoundUp(int x, int y) => (x + y - 1) / y;
+	public static uint DivRoundUp(uint x, uint y) => (x + y - 1u) / y;
 }

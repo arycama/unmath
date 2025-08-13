@@ -20,7 +20,7 @@ public struct Bounds
 
 	public Float3 Min
 	{
-		get
+		readonly get
 		{
 			return center - extents;
 		}
