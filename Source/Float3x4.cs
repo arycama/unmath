@@ -31,4 +31,6 @@ public struct Float3x4
 	public static implicit operator Float4x4(Float3x4 a) => new(a.column0, a.column1, a.column2, new(a.column3, 1));
 
 	public static explicit operator Float3x4(Matrix4x4 a) => new((Float3)a.GetColumn(0), (Float3)a.GetColumn(1), (Float3)a.GetColumn(2), (Float3)a.GetColumn(3));
+
+	public static explicit operator Matrix4x4(Float3x4 a) => new((Float4)a.column0, (Float4)a.column1, (Float4)a.column2, new Float4(a.column3, 1));
 }
