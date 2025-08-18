@@ -38,6 +38,10 @@ public struct Float4x4
 		return matrix;
 	}
 
+	public static Float4x4 Scale(Float3 scale) => new(new Float4(scale.x, 0, 0, 1), new Float4(0, scale.y, 0, 1), new Float4(0, 0, scale.z, 1), new Float4(0, 0, 0, 1));
+	public static Float4x4 Translate(Float3 translation) => new(new Float4(0, 0, 0, 1), new Float4(0, 0, 0, 1), new Float4(0, 0, 0, 1), new Float4(translation, 1));
+	public static Float4x4 ScaleOffset(Float3 scale, Float3 offset) => new(new Float4(scale.x, 0, 0, 1), new Float4(0, scale.y, 0, 1), new Float4(0, 0, scale.z, 1), new Float4(offset, 1));
+
 	public readonly float m00 => c0.x;
 	public readonly float m10 => c0.y;
 	public readonly float m20 => c0.z;
