@@ -148,7 +148,7 @@ public struct Quaternion
 			var d1 = qv * qv.wwww * 2.0f;
 			var d2 = qv * qv.yzxw * 2.0f;
 			var d3 = qv * qv;
-			var euler = Zero;
+			Float3 euler;
 			var y1 = d2.y - d1.x;
 			if (y1 * y1 < CUTOFF)
 			{
@@ -163,7 +163,6 @@ public struct Quaternion
 				y1 = Clamp(y1, -1.0f, 1.0f);
 				var abcd = new Float4(d2.z, d1.y, d2.y, d1.x);
 				var x1 = 2.0f * (abcd.x * abcd.w + abcd.y * abcd.z);
-				var x = abcd * abcd * new Float4(-1.0f, 1.0f, -1.0f, 1.0f);
 				var x2 = Float4.Csum(abcd * abcd * new Float4(-1f, 1f, -1f, 1f));
 				euler = new Float3(Atan2(x1, x2), -Asin(y1), 0.0f);
 			}
@@ -210,7 +209,7 @@ public struct Quaternion
 	/// <summary> Calculates the angular difference to reach a quaternion from this quaternion </summary>
 	public readonly Float3 AngularError(Quaternion a)
 	{
-		var deltaRotation = a.DeltaRotationOld(this);
+		var deltaRotation = DeltaRotation(a);
 
 		// Ensure shortest path
 		if (deltaRotation.w < 0)
@@ -220,7 +219,7 @@ public struct Quaternion
 		return axis * angle;
 	}
 
-	public Float3 AngularError1(Quaternion a)
+	public readonly Float3 AngularError1(Quaternion a)
 	{
 		var deltaRotation = WorldToLocalRotation(a);
 
@@ -233,18 +232,15 @@ public struct Quaternion
 	}
 
 	/// <summary> Calculate how quickly quaternion a rotates towards quaternion b </summary>
-	public static Float3 AngularVelocity(Quaternion a, Quaternion b)
+	public readonly Float3 AngularVelocity(Quaternion a)
 	{
-		return Time.deltaTime == 0 ? Zero : a.AngularError(b) / Time.deltaTime;
+		return Time.deltaTime == 0 ? Zero : AngularError(a) / Time.deltaTime;
 	}
 
-	/// <summary> Rotation that goes from a to this </summary>
-	public Quaternion DeltaRotationOld(Quaternion a) => Rotate(a.Inverse);
-
 	/// <summary> Rotation that goes from this to a </summary>
-	public Quaternion DeltaRotation(Quaternion a) => a.Rotate(Inverse);
+	public readonly Quaternion DeltaRotation(Quaternion a) => a.Rotate(Inverse);
 
-	public Quaternion WorldToLocalRotation(Quaternion a) => InverseRotate(a);
+	public readonly Quaternion WorldToLocalRotation(Quaternion a) => InverseRotate(a);
 
 	/// <summary> Calculates the cosine of the half-angle between two quaternions </summary>
 	public static float Dot(Quaternion a, Quaternion b) => a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
@@ -278,14 +274,27 @@ public struct Quaternion
 	}
 
 	/// <summary> Rotates a by the inverse of b </summary>
-	public Quaternion InverseRotate(Quaternion a) => Inverse.Rotate(a);
+	public readonly Quaternion InverseRotate(Quaternion a) => Inverse.Rotate(a);
 
-	public Float3 InverseRotate(Float3 a) => Inverse.Rotate(a);
+	public readonly Float3 InverseRotate(Float3 a) => Inverse.Rotate(a);
 
 	/// <summary> Calculates the future rotation of a quaternion with an angular velocity in radians </summary>
 	public static Quaternion IntegrateVelocity(Quaternion current, Float3 velocity)
 	{
 		return Normalize(current.Rotate(new Quaternion(0.5f * Time.deltaTime * velocity, 1)));
+
+		var w = SquareMagnitude(velocity);
+
+        if (w == 0.0f)
+            return current;
+
+        w = Sqrt(w);
+        var v = Time.deltaTime * w * 0.5f;
+        var s = Sin(v) / w;
+        var q = Cos(v);
+        var pqr = velocity * s;
+        var quatVel = new Quaternion(pqr, 0);
+        return Normalize(quatVel.Rotate(current) + current * q);
 	}
 
 	/// <summary> Calculates a quaternion with the specified forward and up directions </summary>
