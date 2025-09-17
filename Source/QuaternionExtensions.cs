@@ -8,5 +8,5 @@ public static class QuaternionExtensions
 
 	public static Quaternion WorldToLocalRotation(this UnityEngine.Quaternion a, Quaternion b) => ((Quaternion)a).WorldToLocalRotation(b);
 
-	//public static Quaternion DeltaRotation(this UnityEngine.Quaternion a, Quaternion b) => ((Quaternion)a).WorldToLocalRotation(b);
+	public static Quaternion DeltaRotation(this UnityEngine.Quaternion a, Quaternion b) => ((Quaternion)a).DeltaRotation(b);
 }

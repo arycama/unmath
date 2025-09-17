@@ -186,11 +186,10 @@ public struct Quaternion
 	/// <summary> Calculates the axis quaternion rotates around, and the angle it rotates around that axis in radians </summary>
 	public static void AngleAxis(Quaternion a, out float angle, out Float3 axis)
 	{
-		// Due to numerical issues, a might exceed 1
-		a.w = Clamp(a.w, -1, 1);
-		angle = 2 * Acos(a.w);
-		var halfSinThetaSquared = 1 - Square(a.w);
-		axis = halfSinThetaSquared == 0 ? Float3.Right : a.xyz * Rsqrt(halfSinThetaSquared);
+		var sinHalfThetaSq = SquareMagnitude(a.xyz);
+		var sinHalfTheta = Sqrt(sinHalfThetaSq);
+		angle = 2f * Atan2(sinHalfTheta, a.w);
+		axis = sinHalfTheta == 0.0f ? Float3.Right : a.xyz / sinHalfTheta;
 	}
 
 	/// <summary> Calculates the angular difference to reach quaternion a from quaternion b </summary>
@@ -207,7 +206,7 @@ public struct Quaternion
 	}
 
 	/// <summary> Calculates the angular difference to reach a quaternion from this quaternion </summary>
-	public readonly Float3 AngularError(Quaternion a)
+	public readonly Float3 AngularError(Quaternion a, out float angle)
 	{
 		var deltaRotation = DeltaRotation(a);
 
@@ -215,8 +214,14 @@ public struct Quaternion
 		if (deltaRotation.w < 0)
 			deltaRotation = -deltaRotation;
 
-		AngleAxis(deltaRotation, out var angle, out var axis);
+		AngleAxis(deltaRotation, out angle, out var axis);
 		return axis * angle;
+	}
+
+	/// <summary> Calculates the angular difference to reach a quaternion from this quaternion </summary>
+	public readonly Float3 AngularError(Quaternion a)
+	{
+		return AngularError(a, out _);
 	}
 
 	public readonly Float3 AngularError1(Quaternion a)
@@ -232,10 +237,20 @@ public struct Quaternion
 	}
 
 	/// <summary> Calculate how quickly quaternion a rotates towards quaternion b </summary>
-	public readonly Float3 AngularVelocity(Quaternion a)
+	public readonly Float3 AngularVelocity(Quaternion a, out float angle)
 	{
-		return Time.deltaTime == 0 ? Zero : AngularError(a) / Time.deltaTime;
+		if (Time.deltaTime == 0)
+		{
+			angle = 0;
+			return Zero;
+		}
+		else
+		{
+			return AngularError(a, out angle) / Time.deltaTime;
+		}
 	}
+
+	public readonly Float3 AngularVelocity(Quaternion a) => AngularVelocity(a, out _);
 
 	/// <summary> Rotation that goes from this to a </summary>
 	public readonly Quaternion DeltaRotation(Quaternion a) => a.Rotate(Inverse);
@@ -332,10 +347,10 @@ public struct Quaternion
 	/// <summary> Rotates a point a around point b by this quaternion </summary>
 	public Float3 RotateAround(Float3 a, Float3 b) => Rotate(a - b) + b;
 
-	/// <summary> Spherically interpolates between two quaternions </summary>
-	public static Quaternion Slerp(Quaternion a, Quaternion b, float t)
+	/// <summary> Spherically interpolates from this quaternion to another </summary>
+	public Quaternion Slerp(Quaternion b, float t)
 	{
-		var cosTheta = Dot(a, b);
+		var cosTheta = Dot(this, b);
 		if (cosTheta < 0f)
 		{
 			b = -b;
@@ -345,7 +360,7 @@ public struct Quaternion
 		// Todo: rewrite using sine/cosine differences
 		var theta = Acos(cosTheta);
 		var sinTheta = SinFromCos(cosTheta);
-		return (a * Sin((1 - t) * theta) + b * Sin(t * theta)) / sinTheta;
+		return (this * Sin((1 - t) * theta) + b * Sin(t * theta)) / sinTheta;
 	}
 
 	/// <summary> Calculates a rotation that rotates from a towards b by a max amount </summary>

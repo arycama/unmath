@@ -46,7 +46,7 @@ public struct DualQuaternion
 		}
 
 		// TODO: Not sure if normalize is needed
-		return Normalize(new DualQuaternion(Slerp(a.real, b.real, t), a.dual + t * (b.dual - a.dual)));
+		return Normalize(new DualQuaternion(a.real.Slerp(b.real, t), a.dual + t * (b.dual - a.dual)));
 	}
 
 	public static DualQuaternion Multiply(DualQuaternion a, DualQuaternion b)
