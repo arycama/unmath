@@ -150,11 +150,18 @@ public static partial class Math
         return magnitude > 0 ? deltaV / time : Float2.Zero;
     }
 
-    public static Float3 Force(Float3 currentVelocity, Float3 targetVelocity, float acceleration, float deltaTime)
+	/// <summary> Force required to achieve target velocity from current, limited to a max acceleration </summary>
+	public static Float3 Force(Float3 currentVelocity, Float3 targetVelocity, float acceleration, float deltaTime)
     {
         var deltaV = targetVelocity - currentVelocity;
         var magnitude = Float3.Magnitude(deltaV);
         var time = Max(deltaTime, magnitude / acceleration);
         return magnitude > 0 ? deltaV / time : Zero;
     }
+
+	/// <summary> Accelerates a velocity towards a target value, clapmed by a max acceleration </summary>
+	public static Float3 AccelerateTowards(Float3 current, Float3 target, float maxAcceleration, float deltaTime)
+	{
+		return current + Force(current, target, maxAcceleration, deltaTime) * deltaTime;
+	}
 }
