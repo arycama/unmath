@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using static Float3;
+using static Quaternion;
 
 [Serializable]
 public struct RigidTransform
@@ -19,9 +21,9 @@ public struct RigidTransform
 
 	public static explicit operator RigidTransform(Float3 position) => new(position, Quaternion.Identity);
 
-	public static explicit operator RigidTransform(Quaternion rotation) => new(Float3.Zero, rotation);
+	public static explicit operator RigidTransform(Quaternion rotation) => new(Zero, rotation);
 
-	public static RigidTransform Identity => new(Float3.Zero, Quaternion.Identity);
+	public static RigidTransform Identity => new(Zero, Quaternion.Identity);
 
 	/// <summary> Creates a rigidTransform that rotates another rigidTransform around a pivot point</summary>
 	public static RigidTransform RotateAroundPivot(Quaternion rotation, Float3 pivot) => new(pivot - rotation.Rotate(pivot), rotation);
@@ -43,7 +45,7 @@ public struct RigidTransform
 
 	public readonly RigidTransform Transform(RigidTransform a) => a.Rotate(rotation).Translate(position);
 
-	public readonly RigidTransform Transform(Quaternion a) => Transform(new RigidTransform(Float3.Zero, a));
+	public readonly RigidTransform Transform(Quaternion a) => Transform(new RigidTransform(Zero, a));
 
 	public readonly RigidTransform Transform(Float3 a) => Transform(new RigidTransform(a, Quaternion.Identity));
 
@@ -52,19 +54,18 @@ public struct RigidTransform
 	public readonly Quaternion TransformRotation(Quaternion a) => Transform(a).rotation;
 
 
-	public readonly RigidTransform InverseTransform(RigidTransform a) => new(rotation.InverseRotate(a.position - position), rotation.InverseRotate(a.rotation));
+	public readonly RigidTransform InverseTransform(RigidTransform a) => Inverse.Transform(a);
 
 	public readonly RigidTransform InverseTransform(Float3 a) => InverseTransform(new RigidTransform(a, Quaternion.Identity));
 
-	public readonly RigidTransform InverseTransform(Quaternion a) => InverseTransform(new RigidTransform(Float3.Zero, a));
+	public readonly RigidTransform InverseTransform(Quaternion a) => InverseTransform(new RigidTransform(Zero, a));
 
 	public readonly Float3 InverseTransformPoint(Float3 a) => InverseTransform(a).position;
 
 	public readonly Quaternion InverseTransformRotation(Quaternion a) => InverseTransform(a).rotation;
 
-
 	public readonly RigidTransform RotateAround(Quaternion rotation, Float3 pivot) => RotateAroundPivot(rotation, pivot).Transform(this);
 
 	/// <summary> RigidTransform that when applied to this will result in a </summary>
-	public readonly RigidTransform DeltaTransform(RigidTransform a) => new(a.rotation.Rotate(rotation.InverseRotate(-position)) + a.position, a.rotation.Rotate(rotation.Inverse));
+	public readonly RigidTransform DeltaTransform(RigidTransform a) => a.Transform(Inverse);
 }
