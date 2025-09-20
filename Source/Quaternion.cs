@@ -335,20 +335,20 @@ public struct Quaternion
 	}
 
 	/// <summary> Rotates a point by this quaternion </summary>
-	public Float3 Rotate(Float3 a)
+	public readonly Float3 Rotate(Float3 a)
 	{
 		var t = 2 * Cross(xyz, a);
 		return a + w * t + Cross(xyz, t);
 	}
 
 	/// <summary> Rotates a quaternion by this quaternion </summary>
-	public Quaternion Rotate(Quaternion a) => new(xyz * a.w + a.xyz * w + Cross(xyz, a.xyz), w * a.w - Float3.Dot(xyz, a.xyz));
+	public readonly Quaternion Rotate(Quaternion a) => new(xyz * a.w + a.xyz * w + Cross(xyz, a.xyz), w * a.w - Float3.Dot(xyz, a.xyz));
 
 	/// <summary> Rotates a point a around point b by this quaternion </summary>
-	public Float3 RotateAround(Float3 a, Float3 b) => Rotate(a - b) + b;
+	public readonly Float3 RotateAround(Float3 a, Float3 b) => Rotate(a - b) + b;
 
 	/// <summary> Spherically interpolates from this quaternion to another </summary>
-	public Quaternion Slerp(Quaternion b, float t)
+	public readonly Quaternion Slerp(Quaternion b, float t)
 	{
 		var cosTheta = Dot(this, b);
 		if (cosTheta < 0f)
