@@ -325,7 +325,7 @@ public struct Quaternion
 	public static Quaternion LookRotation(Float3 forward) => LookRotation(forward, new(0, 1, 0));
 
 	/// <summary> Calculates a quaternion partway between a and b, by amount t. Result may need normalization or special handling </summary>
-	public static Quaternion Lerp(Quaternion a, Quaternion b, float t) => a + (Dot(a, b) < 0 ? -b : b - a) * t;
+	public readonly Quaternion Lerp(Quaternion a, float t) => Normalize(this + (Dot(this, a) < 0 ? -a : a - this) * t);
 
 	/// <summary> Ensures a quaternion has a unit length of 1 so that the rotation is valid an does not give incorrect results </summary>
 	public static Quaternion Normalize(Quaternion a)
@@ -358,7 +358,7 @@ public struct Quaternion
 		}
 
 		// Todo: rewrite using sine/cosine differences
-		var theta = Acos(cosTheta);
+		var theta = Acos(Clamp(cosTheta, -1, 1));
 		var sinTheta = SinFromCos(cosTheta);
 		return (this * Sin((1 - t) * theta) + b * Sin(t * theta)) / sinTheta;
 	}

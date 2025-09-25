@@ -264,4 +264,16 @@ public struct Float3 : IEquatable<Float3>
 	}
 
 	public Float3 Clamp(Float3 min, Float3 max) => Min(max, Max(min, this));
+
+	public static float InverseLerp(Float3 a, Float3 b, Float3 value)
+	{
+		// Calculate the direction vector from a to b
+		Float3 ab = b - a;
+		Float3 av = value - a;
+
+		// Project av onto ab and get the magnitude ratio
+		// This gives the percentage along the line from a to b
+		var ab2 = Dot(ab, ab);
+		return ab2 == 0.0f ? 0.0f : Float3.Dot(av, ab) / ab2;
+	}
 }
