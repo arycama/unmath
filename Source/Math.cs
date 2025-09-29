@@ -159,6 +159,18 @@ public static partial class Math
 		return Abs(delta) <= speed ? b : a + Sign(delta) * speed;
 	}
 
+	public static float MoveTowardsAngle(float a, float b, float speed)
+	{
+		float num = DeltaAngle(a, b);
+		if (0f - speed < num && num < speed)
+		{
+			return b;
+		}
+
+		b = a + num;
+		return MoveTowards(a, b, speed);
+	}
+
 	// Vector/matrix
 	public static float Magnitude(float a) => Abs(a);
 
