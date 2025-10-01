@@ -69,5 +69,5 @@ public struct RigidTransform
 	/// <summary> RigidTransform that when applied to this will result in a </summary>
 	public readonly RigidTransform DeltaTransform(RigidTransform a) => a.Transform(Inverse);
 
-	public readonly RigidTransform Lerp(RigidTransform a, float t) => new(Float3.Lerp(position, a.position, t), rotation.Lerp(a.rotation, t));
+	public readonly RigidTransform Lerp(RigidTransform a, float t) => new(Float3.Lerp(position, a.position, t), rotation.Slerp(a.rotation, t));
 }

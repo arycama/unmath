@@ -33,7 +33,7 @@ public struct DualQuaternion
 	{
 		var realNormed = Quaternion.Normalize(a.real);
 		var dot = Dot(a.real, a.dual);
-		return new(a.dual - a.real * dot, realNormed);
+		return new(realNormed, a.dual - a.real * dot);
 	}
 
 	public static DualQuaternion Dlerp(DualQuaternion a, DualQuaternion b, float t)
@@ -48,6 +48,48 @@ public struct DualQuaternion
 		// TODO: Not sure if normalize is needed
 		return Normalize(new DualQuaternion(a.real.Slerp(b.real, t), a.dual + t * (b.dual - a.dual)));
 	}
+
+	public static DualQuaternion ScLERP(DualQuaternion dq1, DualQuaternion dq2, float t)
+	{
+		// Calculate the dot product between the real parts
+		float dot = Quaternion.Dot(dq1.real, dq2.real);
+
+		// Ensure we take the shortest path
+		if (dot < 0.0f)
+		{
+			dq2 = new DualQuaternion(-dq2.real, -dq2.dual);
+			dot = -dot;
+		}
+
+		// Clamp dot product to avoid numerical issues
+		dot = Math.Min(Math.Max(dot, -1.0f), 1.0f);
+
+		// Calculate the angle between real quaternions
+		float theta = (float)Math.Acos(dot);
+		if (theta == 0f)
+			return dq1;
+
+		//if (Math.Abs(theta) < float.Epsilon)
+		//{
+		//	// If angles are very close, use simple linear interpolation
+		//	return Lerp(dq1, dq2, t);
+		//}
+
+		// Calculate interpolation factors
+		float sinTheta = (float)Math.Sin(theta);
+		float factor1 = (float)Math.Sin((1 - t) * theta) / sinTheta;
+		float factor2 = (float)Math.Sin(t * theta) / sinTheta;
+
+		// Interpolate real part
+		Quaternion real = factor1 * dq1.real + factor2 * dq2.real;
+
+		// For dual part, we need to handle the screw motion interpolation
+		// The dual part represents the translation component
+		Quaternion dual = factor1 * dq1.dual + factor2 * dq2.dual;
+
+		return Normalize(new DualQuaternion(real, dual));
+	}
+
 
 	public static DualQuaternion Multiply(DualQuaternion a, DualQuaternion b)
 	{

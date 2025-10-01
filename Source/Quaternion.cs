@@ -134,8 +134,19 @@ public struct Quaternion
 
 	public readonly Float3 Forward => new(2 * (x * z + w * y), 2 * (y * z - w * x), 1 - 2 * (x * x + y * y));
 
+	/// <summary> Half Angle in radians to another quaternion </summary>
+	public readonly float HalfAngle(Quaternion a)
+	{
+		var cosTheta = Dot(this, a);
+		var sinTheta = SinFromCos(cosTheta);
+		return Atan2(sinTheta, cosTheta);
+	}
+
 	/// <summary> Angle in radians to another quaternion </summary>
-	public readonly float Angle(Quaternion a) => 2 * Acos(Abs(Dot(this, a)));
+	public readonly float Angle(Quaternion a)
+	{
+		return 2.0f * HalfAngle(a);
+	}
 
 	/// <summary> Calculates the angles in degrees that a quaternion would rotate by </summary>
 	public readonly Float3 EulerAngles
@@ -175,7 +186,6 @@ public struct Quaternion
 
 	/// <summary> Calculates the squared magnitude of a quaternion, should be 1 for rotations, mostly used for normalizing quaternions </summary>
 	public readonly float SquareMagnitude => Dot(this, this);
-
 
 	public static Quaternion AngleAxis(float angle, Float3 axis)
 	{
@@ -351,16 +361,15 @@ public struct Quaternion
 	public readonly Quaternion Slerp(Quaternion b, float t)
 	{
 		var cosTheta = Dot(this, b);
-		if (cosTheta < 0f)
+		if (cosTheta < 0.0f)
 		{
 			b = -b;
 			cosTheta = -cosTheta;
 		}
 
-		// Todo: rewrite using sine/cosine differences
-		var theta = Acos(Clamp(cosTheta, -1, 1));
 		var sinTheta = SinFromCos(cosTheta);
-		return (this * Sin((1 - t) * theta) + b * Sin(t * theta)) / sinTheta;
+		var theta = Atan2(sinTheta, cosTheta);
+		return sinTheta > 0.0f ? (this * Sin((1 - t) * theta) + b * Sin(t * theta)) / sinTheta : this;
 	}
 
 	/// <summary> Calculates a rotation that rotates from a towards b by a max amount </summary>
