@@ -22,6 +22,7 @@ public struct Float2
 
 	public static implicit operator Float3(Float2 a) => new(a.x, a.y, 0);
 
+	public static implicit operator Float2(float a) => new(a, a);
 	public static implicit operator Float2(Vector2 a) => new(a.x, a.y);
 	public static implicit operator Vector2(Float2 a) => new(a.x, a.y);
 
@@ -61,8 +62,8 @@ public struct Float2
 		return SpringDamp(current, target, ref velocity, sqrtStiffness, overshoot);
 	}
 
-	public static float CMin(Float2 a) => Min(a.x, a.y);
-	public static float CMax(Float2 a) => Max(a.x, a.y);
+	public static float CMin(Float2 a) => Math.Min(a.x, a.y);
+	public static float CMax(Float2 a) => Math.Max(a.x, a.y);
 
 	public static Float2 Radians(Float2 a) => new(Math.Radians(a.x), Math.Radians(a.y));
 	public static Float2 Lerp(Float2 a, Float2 b, float t) => new(Math.Lerp(a.x, b.x, t), Math.Lerp(a.y, b.y, t));
@@ -108,5 +109,12 @@ public struct Float2
 	public static float Distance(Float2 p0, Float2 p1) => Magnitude(p1 - p0);
 
 	public static float SignedAngle(Float2 from, Float2 to) => Angle(from, to) * Sign(Cross(from, to));
+
+	public static Float2 Min(Float2 min, Float2 a) => new(Math.Min(min.x, a.x), Math.Min(min.y, a.y));
+	public static Float2 Max(Float2 max, Float2 a) => new(Math.Max(max.x, a.x), Math.Max(max.y, a.y));
+
+	public static Float2 Ceil(Float2 a) => new(Math.Ceil(a.x), Math.Ceil(a.y));
+	public static Float2 Floor(Float2 a) => new(Math.Floor(a.x), Math.Floor(a.y));
+
 	public Float2 Clamp(Float2 min, Float2 max) => new(Math.Clamp(x, min.x, max.x), Math.Clamp(y, min.y, max.y));
 }
