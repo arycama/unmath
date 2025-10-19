@@ -17,6 +17,8 @@ public struct Float4x4
 
 	public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
 
+	public static Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
+
 	public static Float4x4 Ortho(float left, float right, float bottom, float top, float near, float far)
 	{
 		// TODO: Implement properly
@@ -69,8 +71,6 @@ public struct Float4x4
 			return Matrix4x4.Determinant(this);
 		}
 	}
-
-	public readonly Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
 
 	public readonly Float4x4 Inverse
 	{
