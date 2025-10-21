@@ -10,4 +10,6 @@ public struct Int2
 		this.x = x;
 		this.y = y;
 	}
+
+	public static explicit operator Float2(Int2 a) => new(a.x, a.y);
 }
