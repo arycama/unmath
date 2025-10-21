@@ -62,8 +62,6 @@ public struct Float3 : IEquatable<Float3>
 
 	public static implicit operator Vector3(Float3 a) => new(a.x, a.y, a.z);
 
-	public static implicit operator Float4(Float3 a) => new(a.x, a.y, a.z, 0);
-
 	public static explicit operator Float3(Vector4 a) => new(a.x, a.y, a.z);
 
 	public static Float3 operator +(Float3 a) => new(a.x, a.y, a.z);

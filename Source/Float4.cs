@@ -27,9 +27,16 @@ public struct Float4
 	public static Float4 operator *(Float4 a, float b) => new(a.x * b, a.y * b, a.z * b, a.w * b);
 	public static Float4 operator *(Float4 a, Float4 b) => new(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 
-	public static implicit operator Vector4(Float4 a) => new(a.x, a.y, a.z, a.w);
+	public static implicit operator Float4(Float2 a) => new(a.x, a.y, 0f, 0f);
+	public static implicit operator Float4(Float3 a) => new(a.x, a.y, a.z, 0f);
+
+	public static implicit operator Float4(Int2 a) => new(a.x, a.y, 0f, 0f);
+	public static implicit operator Float4(Int3 a) => new(a.x, a.y, a.z, 0f);
+	public static implicit operator Float4(Int4 a) => new(a.x, a.y, a.z, a.w);
 
 	public static implicit operator Float4(Vector4 a) => new(a.x, a.y, a.z, a.w);
+
+	public static implicit operator Vector4(Float4 a) => new(a.x, a.y, a.z, a.w);
 
 	public static float Csum(Float4 a) => (a.x + a.y) + (a.z + a.w);
 
