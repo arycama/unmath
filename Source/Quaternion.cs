@@ -128,11 +128,11 @@ public struct Quaternion
 	public Float3 zzy => new(z, z, y);
 	public Float3 zzz => new(z, z, z);
 
-	public readonly Float3 Right => new(1 - 2 * (y * y + z * z), 2 * (x * y + w * z), 2 * (x * z - w * y));
+	public readonly Float3 Right => new(1 - 2 * (y * y + z * z), 2 * (x * y + z * w), 2 * (x * z - y * w));
 
-	public readonly Float3 Up => new(2 * (x * y - w * z), 1 - 2 * (x * x + z * z), 2 * (y * z + w * x));
+	public readonly Float3 Up => new(2 * (x * y - z * w), 1 - 2 * (x * x + z * z), 2 * (x * w + y * z));
 
-	public readonly Float3 Forward => new(2 * (x * z + w * y), 2 * (y * z - w * x), 1 - 2 * (x * x + y * y));
+	public readonly Float3 Forward => new(2 * (x * z + y * w), 2 * (y * z - x * w), 1 - 2 * (x * x + y * y));
 
 	/// <summary> Half Angle in radians to another quaternion </summary>
 	public readonly float HalfAngle(Quaternion a)
