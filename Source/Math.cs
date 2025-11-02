@@ -138,10 +138,22 @@ public static partial class Math
 	// Utility
 	public static float Lerp(float a, float b, float t) => a + t * (b - a);
 	public static float InvLerp(float t, float a, float b) => (t - a) * Rcp(b - a);
-	public static float Remap(float x, float prevMin, float prevMax, float newMin, float newMax) => Lerp(newMin, newMax, InvLerp(x, prevMin, prevMax));
 	public static float RemapClamped(float x, float prevMin, float prevMax, float newMin, float newMax) => Lerp(newMin, newMax, Saturate(InvLerp(x, prevMin, prevMax)));
 	public static float Damp(float a, float b, float t, float dt) => Lerp(a, b, 1 - Exp(-t * dt));
 	public static float Damp(float a, float b, float t) => Damp(a, b, t, Time.deltaTime);
+
+	public static Float2 RemapScaleOffset(float prevMin, float prevMax, float newMin, float newMax)
+	{
+		var scale = Rcp(prevMax - prevMin) * (newMax - newMin);
+		var offset = newMin - prevMin * scale;
+		return new Float2(scale, offset);
+	}
+
+	public static float Remap(float x, float prevMin, float prevMax, float newMin, float newMax)
+	{
+		var scaleOffset = RemapScaleOffset(prevMin, prevMax, newMin, newMax);
+		return x * scaleOffset.x + scaleOffset.y;
+	}
 
 	public static bool Quadratic(float a, float b, float c, out float r0, out float r1)
 	{
