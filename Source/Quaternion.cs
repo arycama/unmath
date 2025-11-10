@@ -28,31 +28,39 @@ public struct Quaternion
 	}
 
 	/// <summary> Construct a Quaternion from a 3x3 matrix </summary>
-	public Quaternion(Float3x3 m)
+	public Quaternion(Float3 right, Float3 up, Float3 forward)
 	{
-		if (m.Trace > 0f)
+		var diag = right.x + up.y + forward.z;
+
+        if (diag > 0f)
 		{
-			var s = 2 * Sqrt(m.Trace + 1);
-			(x, y, z, w) = ((m.m21 - m.m12) / s, (m.m02 - m.m20) / s, (m.m10 - m.m01) / s, s * 0.25f);
+			var s = 2 * Sqrt(diag + 1);
+			var rcpS = Rcp(s);
+			(x, y, z, w) = ((up.z - forward.y) * rcpS, (forward.x - right.z) * rcpS, (right.y - up.x) * rcpS, s * 0.25f);
 		}
-		else if (m.m00 > m.m11 && m.m00 > m.m22)
+		else if (right.x > up.y && right.x > forward.z)
 		{
-			var s = 2 * Sqrt(1 + m.m00 - m.m11 - m.m22);
-			(x, y, z, w) = (s * 0.25f, (m.m10 + m.m01) / s, (m.m02 + m.m20) / s, (m.m21 - m.m12) / s);
+			var s = 2 * Sqrt(1 + right.x - up.y - forward.z);
+			var rcpS = Rcp(s);
+            (x, y, z, w) = (s * 0.25f, (right.y + up.x) * rcpS, (forward.x + right.z) * rcpS, (up.z - forward.y) * rcpS);
 		}
-		else if (m.m11 > m.m22)
+		else if (up.y > forward.z)
 		{
-			var s = 2 * Sqrt(1f + m.m11 - m.m00 - m.m22);
-			(x, y, z, w) = ((m.m10 + m.m01) / s, s * 0.25f, (m.m21 + m.m12) / s, (m.m02 - m.m20) / s);
+			var s = 2 * Sqrt(1f + up.y - right.x - forward.z);
+			var rcpS = Rcp(s);
+            (x, y, z, w) = ((right.y + up.x) * rcpS, s * 0.25f, (up.z + forward.y) * rcpS, (forward.x - right.z) * rcpS);
 		}
 		else
 		{
-			var s = 2 * Sqrt(1f + m.m22 - m.m00 - m.m11);
-			(x, y, z, w) = ((m.m02 + m.m20) / s, (m.m21 + m.m12) / s, s * 0.25f, (m.m10 - m.m01) / s);
+			var s = 2 * Sqrt(1f + forward.z - right.x - up.y);
+			var rcpS = Rcp(s);
+            (x, y, z, w) = ((forward.x + right.z) * rcpS, (up.z + forward.y) * rcpS, s * 0.25f, (right.y - up.x) * rcpS);
 		}
 	}
 
-	public Quaternion(Float3 xyz, float w) : this(xyz.x, xyz.y, xyz.z, w) { }
+	public Quaternion(Float3x3 m) : this(m.column0, m.column1, m.column2) { }
+
+    public Quaternion(Float3 xyz, float w) : this(xyz.x, xyz.y, xyz.z, w) { }
 
 	public static Quaternion operator +(Quaternion a) => new(a.x, a.y, a.z, a.w);
 

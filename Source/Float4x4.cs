@@ -15,11 +15,11 @@ public struct Float4x4
 		c3 = column3;
 	}
 
-	public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
+    public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
 
 	public static Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
 
-	public static Float4x4 Ortho(float left, float right, float bottom, float top, float near, float far)
+    public static Float4x4 Ortho(float left, float right, float bottom, float top, float near, float far)
 	{
 		// TODO: Implement properly
 		var matrix = Matrix4x4.Ortho(left, right, bottom, top, near, far);
@@ -64,7 +64,12 @@ public struct Float4x4
 	public readonly float m23 => c3.z;
 	public readonly float m33 => c3.w;
 
-	public readonly float Determinant
+    public readonly Float4 r0 => new(c0.x, c1.x, c2.x, c3.x);
+    public readonly Float4 r1 => new(c0.y, c1.y, c2.y, c3.y);
+    public readonly Float4 r2 => new(c0.z, c1.z, c2.z, c3.z);
+    public readonly Float4 r3 => new(c0.w, c1.w, c2.w, c3.w);
+
+    public readonly float Determinant
 	{
 		get
 		{
