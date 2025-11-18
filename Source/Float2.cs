@@ -108,7 +108,7 @@ public struct Float2
 	public static Float2 Normalize(Float2 a) => a * RcpLength(a);
 	public static float Distance(Float2 p0, Float2 p1) => Magnitude(p1 - p0);
 
-	public static float SignedAngle(Float2 from, Float2 to) => Angle(from, to) * Sign(Cross(from, to));
+	public static float SignedAngle(Float2 a, Float2 b) => Atan2(Cross(a, b), Dot(a, b));
 
 	public static Float2 Min(Float2 min, Float2 a) => new(Math.Min(min.x, a.x), Math.Min(min.y, a.y));
 	public static Float2 Max(Float2 max, Float2 a) => new(Math.Max(max.x, a.x), Math.Max(max.y, a.y));
