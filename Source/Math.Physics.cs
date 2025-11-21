@@ -145,7 +145,7 @@ public static partial class Math
     public static Float2 Force(Float2 currentVelocity, Float2 targetVelocity, float acceleration, float deltaTime)
     {
         var deltaV = targetVelocity - currentVelocity;
-        var magnitude = Float2.Magnitude(deltaV);
+        var magnitude = deltaV.Magnitude;
         var time = Max(deltaTime, magnitude / acceleration);
         return magnitude > 0 ? deltaV / time : Float2.Zero;
     }
