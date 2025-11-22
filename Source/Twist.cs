@@ -1,5 +1,7 @@
-﻿using Unity.Profiling;
+﻿using System;
+using Unity.Profiling;
 
+[Serializable]
 public struct Twist
 {
 	public Float3 linearVelocity, angularVelocity;
@@ -10,15 +12,19 @@ public struct Twist
 		this.angularVelocity = angularVelocity;
 	}
 
-	public static Twist Zero => new(Float3.Zero, Float3.Zero);
+	public Twist AddForce(Float3 force) => new(linearVelocity + force, angularVelocity);
 
-	public void AddForce(Float3 force) => linearVelocity += force;
+	public Twist AddTorque(Float3 torque) => new(linearVelocity, angularVelocity + torque);
 
-	public void AddTorque(Float3 torque) => angularVelocity += torque;
-
-	public void AddForceAtPoint(Float3 force, Float3 point, Float3 centerOfMass)
+	public Twist AddTwist(Twist twist)
 	{
-		AddForce(force);
-		AddTorque(Float3.Cross(point - centerOfMass, force));
+		var result = AddForce(twist.linearVelocity);
+		return result.AddTorque(twist.angularVelocity);
+	}
+
+	public Twist AddForceAtPoint(Float3 force, Float3 point, Float3 centerOfMass)
+	{
+		var result = AddForce(force);
+		return result.AddTorque(Float3.Cross(point - centerOfMass, force));
 	}
 }
