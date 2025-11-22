@@ -13,15 +13,15 @@
 	public bool DistanceToPoint(Float2 p, out float distance)
 	{
 		var delta = b - a;
-		var segmentLengthSquared = Float2.SquareMagnitude(delta);
-		var t = Float2.Dot(p - a, delta) / segmentLengthSquared;
+		var segmentLengthSquared = delta.SquareMagnitude;
+		var t = (p - a).Dot(delta) / segmentLengthSquared;
 
 		// Convert segmet to A B C coefficients and calculate distance
 		var A = b.y - a.y;
 		var B = a.x - b.x;
 		var C = Float2.Cross(b - a, a);
 
-		distance = (A * p.x + B * p.y + C) * Float2.RcpMagnitude(new Float2(A, B));
+		distance = (A * p.x + B * p.y + C) * (new Float2(A, B)).RcpMagnitude;
 
 		return t >= 0.0f && t <= 1.0f;
 	}
@@ -31,8 +31,8 @@
 		distance = new Line2D(a, b).DistanceAlongRay(ray);
 		var point = distance * ray.direction + ray.origin;
 		var delta = b - a;
-		var segmentLengthSquared = Float2.SquareMagnitude(delta);
-		var t = Float2.Dot(point - a, delta) / segmentLengthSquared;
+		var segmentLengthSquared = delta.SquareMagnitude;
+		var t = (point - a).Dot(delta) / segmentLengthSquared;
 		return t >= 0.0f && t <= 1.0f;
 	}
 
@@ -40,15 +40,14 @@
 	{
 		point = new Line2D(a, b).IntersectRay(ray);
 		var delta = b - a;
-		var segmentLengthSquared = Float2.SquareMagnitude(delta);
-		var t = Float2.Dot(point - a, delta) / segmentLengthSquared;
+		var segmentLengthSquared = delta.SquareMagnitude;
+		var t = (point - a).Dot(delta) / segmentLengthSquared;
 		return t >= 0.0f && t <= 1.0f;
 	}
 
 	public bool IntersectLine(Line2D line, out Float2 point)
 	{
 		// Represent the segment as a line (Ax + By + C = 0)
-		var segmentDir = b - a;
 		var segmentLine = new Line2D(a, b);
 
 		// Find intersection between the two lines
@@ -56,8 +55,8 @@
 
 		// Check if the intersection point lies within the segment bounds
 		var delta = b - a;
-		var segmentLengthSquared = Float2.SquareMagnitude(delta);
-		var t = Float2.Dot(point - a, delta) / segmentLengthSquared;
+		var segmentLengthSquared = delta.SquareMagnitude;
+		var t = (point - a).Dot(delta) / segmentLengthSquared;
 
 		return t >= 0.0f && t <= 1.0f;
 	}

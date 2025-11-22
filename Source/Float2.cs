@@ -43,6 +43,14 @@ public struct Float2
 
 	public override string ToString() => $"({x}, {y})";
 
+	public readonly float SquareMagnitude => Dot(this);
+
+	public readonly float RcpMagnitude => Rsqrt(SquareMagnitude);
+
+	public readonly float Magnitude => Rcp(RcpMagnitude);
+
+	public readonly Float2 Normalized => RcpMagnitude * this;
+
 	public static Float2 DeltaAngle(Float2 a, Float2 b) => new(Math.DeltaAngle(a.x, b.x), Math.DeltaAngle(a.y, b.y));
 
 	public static Float2 SpringDampVelocity(Float2 delta, Float2 velocity, float sqrtStiffness, float overshoot = 0)
@@ -67,16 +75,8 @@ public struct Float2
 
 	public static Float2 Radians(Float2 a) => new(Math.Radians(a.x), Math.Radians(a.y));
 	public static Float2 Lerp(Float2 a, Float2 b, float t) => new(Math.Lerp(a.x, b.x, t), Math.Lerp(a.y, b.y, t));
-
-
-	public static float SquareMagnitude(Float2 a) => Dot(a, a);
-
-	public static float Magnitude(Float2 a) => Math.Sqrt(SquareMagnitude(a));
-
-	public static float Dot(Float2 a, Float2 b) => a.x * b.x + a.y * b.y;
-
-	public static float RcpMagnitude(Float2 a) => Rsqrt(SquareMagnitude(a));
-	public static float RcpMagnitude(float x, float y) => RcpMagnitude(new(x, y));
+	
+	public readonly float Dot(Float2 a) => x * a.x + y * a.y;
 
 	public static Float2 Abs(Float2 a) => new(Math.Abs(a.x), Math.Abs(a.y));
 	public static Float2 Square(Float2 a) => a * a;
@@ -84,13 +84,13 @@ public struct Float2
 
 	public static float Angle(Float2 a, Float2 b)
 	{
-		var squareMagnitudeProduct = SquareMagnitude(a) * SquareMagnitude(b);
-		return squareMagnitudeProduct == 0 ? 0 : Acos(Dot(a, b) * Rsqrt(squareMagnitudeProduct));
+		var squareMagnitudeProduct = a.SquareMagnitude * b.SquareMagnitude;
+		return squareMagnitudeProduct == 0 ? 0 : Acos(a.Dot(b) * Rsqrt(squareMagnitudeProduct));
 	}
 
 	public static Float2 ClampMagnitude(Float2 a, float maxMagnitude)
 	{
-		var squareMagnitude = SquareMagnitude(a);
+		var squareMagnitude = a.SquareMagnitude;
 		if (squareMagnitude <= Math.Square(maxMagnitude))
 			return a;
 
@@ -103,12 +103,9 @@ public struct Float2
 		return a.x * b.y - a.y * b.x;
 	}
 
-	public static float RcpLength(Float2 a) => Rsqrt(SquareMagnitude(a));
+	public static float Distance(Float2 p0, Float2 p1) => (p1 - p0).Magnitude;
 
-	public static Float2 Normalize(Float2 a) => a * RcpLength(a);
-	public static float Distance(Float2 p0, Float2 p1) => Magnitude(p1 - p0);
-
-	public static float SignedAngle(Float2 a, Float2 b) => Atan2(Cross(a, b), Dot(a, b));
+	public static float SignedAngle(Float2 a, Float2 b) => Atan2(Cross(a, b), a.Dot(b));
 
 	public static Float2 Min(Float2 min, Float2 a) => new(Math.Min(min.x, a.x), Math.Min(min.y, a.y));
 	public static Float2 Max(Float2 max, Float2 a) => new(Math.Max(max.x, a.x), Math.Max(max.y, a.y));
