@@ -13,9 +13,13 @@ public struct Float2
 		this.y = y;
 	}
 
-	public Float2 yx => new(y, x);
+	public readonly Float2 yx => new(y, x);
 
 	public static Float2 Zero => new(0, 0);
+
+	public static Float2 FromAngle(float angle) => new(Cos(angle), Sin(angle));
+
+	public static Float2 FromAngleDegrees(float angle) => FromAngle(Math.Radians(angle));
 
 	public static bool operator ==(Float2 a, Float2 b) => a.x == b.x && a.y == b.y;
 	public static bool operator !=(Float2 a, Float2 b) => a.x != b.x || a.y != b.y;
