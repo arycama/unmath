@@ -12,4 +12,6 @@ public struct Int2
 	}
 
 	public static explicit operator Float2(Int2 a) => new(a.x, a.y);
+
+	public static implicit operator Int2(int a) => new(a, a);
 }
