@@ -142,6 +142,10 @@ public struct Quaternion
 
 	public readonly Float3 Forward => new(2 * (x * z + y * w), 2 * (y * z - x * w), 1 - 2 * (x * x + y * y));
 
+	public readonly float Theta => 2.0f * Atan2(y, w);
+
+	public readonly float Phi => 2.0f * Atan2(x, w);
+
 	/// <summary> Half Angle in radians to another quaternion </summary>
 	public readonly float HalfAngle(Quaternion a)
 	{
