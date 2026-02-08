@@ -274,4 +274,6 @@ public struct Float3 : IEquatable<Float3>
 		var ab2 = Dot(ab, ab);
 		return ab2 == 0.0f ? 0.0f : Float3.Dot(av, ab) / ab2;
 	}
+
+	public static float TripleProduct(Float3 a, Float3 b, Float3 c) => Dot(a, Cross(b, c));
 }

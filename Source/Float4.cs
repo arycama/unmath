@@ -17,10 +17,11 @@ public struct Float4
 
 	public Float4(Float3 xyz, float w) : this(xyz.x, xyz.y, xyz.z, w) { }
 
-	public Float3 xyz => new(x, y, z);
+	public readonly Float3 xyz => new(x, y, z);
+	public readonly Float3 yzw => new(y, z, w);
 
-	public Float4 wwww => new(w, w, w, w);
-	public Float4 yzxw => new(y, z, x, w);
+	public readonly Float4 wwww => new(w, w, w, w);
+	public readonly Float4 yzxw => new(y, z, x, w);
 
 	public static Float4 operator +(Float4 a, Float4 b) => new(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 	public static Float4 operator *(float a, Float4 b) => new(a * b.x, a * b.y, a * b.z, a * b.w);

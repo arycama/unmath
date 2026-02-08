@@ -7,12 +7,12 @@ public struct Float4x4
 {
 	public Float4 c0, c1, c2, c3;
 
-	public Float4x4(Float4 column0, Float4 column1, Float4 column2, Float4 column3)
+	public Float4x4(Float4 c0, Float4 c1, Float4 c2, Float4 c3)
 	{
-		c0 = column0;
-		c1 = column1;
-		c2 = column2;
-		c3 = column3;
+		this.c0 = c0;
+		this.c1 = c1;
+		this.c2 = c2;
+		this.c3 = c3;
 	}
 
     public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
@@ -69,13 +69,11 @@ public struct Float4x4
     public readonly Float4 r2 => new(c0.z, c1.z, c2.z, c3.z);
     public readonly Float4 r3 => new(c0.w, c1.w, c2.w, c3.w);
 
-    public readonly float Determinant
-	{
-		get
-		{
-			return Matrix4x4.Determinant(this);
-		}
-	}
+	public readonly float Determinant =>
+			c0.x * TripleProduct(c1.yzw, c2.yzw, c3.yzw) - 
+			c1.x * TripleProduct(c0.yzw, c2.yzw, c3.yzw) +
+			c2.x * TripleProduct(c0.yzw, c1.yzw, c3.yzw) -
+			c3.x * TripleProduct(c0.yzw, c1.yzw, c2.yzw);
 
 	public readonly Float4x4 Inverse
 	{
@@ -105,5 +103,5 @@ public struct Float4x4
 		c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
 	);
 
-	public static Float4x4 TRS(Float3 pos, Quaternion q, Float3 s) => Matrix4x4.TRS(pos, q, s);
+	public static Float4x4 TRS(Float3 pos, Quaternion q, Float3 s) => new(q.Right * s.x, q.Up * s.y, q.Forward * s.z, new(pos, 1));
 }
