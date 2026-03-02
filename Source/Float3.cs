@@ -94,49 +94,53 @@ public struct Float3 : IEquatable<Float3>
 	public static bool operator ==(Float3 a, Float3 b) => a.x == b.x && a.y == b.y && a.z == b.z;
 	public static bool operator !=(Float3 a, Float3 b) => a.x != b.x || a.y != b.y || a.z != b.z;
 
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xx => new(x, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xy => new(x, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xz => new(x, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 yx => new(y, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 yy => new(y, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 yz => new(y, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 zx => new(z, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 zy => new(z, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 zz => new(z, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xx => new(x, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xy => new(x, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xz => new(x, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yx => new(y, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yy => new(y, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yz => new(y, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 zx => new(z, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 zy => new(z, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 zz => new(z, z);
 
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xxx => new(x, x, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xxy => new(x, x, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xxz => new(x, x, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xyx => new(x, y, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xyy => new(x, y, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xyz => new(x, y, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xzx => new(x, z, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xzy => new(x, z, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 xzz => new(x, z, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xxx => new(x, x, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xxy => new(x, x, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xxz => new(x, x, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xyx => new(x, y, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xyy => new(x, y, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xyz => new(x, y, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xzx => new(x, z, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xzy => new(x, z, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 xzz => new(x, z, z);
 
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yxx => new(y, x, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yxy => new(y, x, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yxz => new(y, x, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yyx => new(y, y, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yyy => new(y, y, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yyz => new(y, y, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yzx => new(y, z, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yzy => new(y, z, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 yzz => new(y, z, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yxx => new(y, x, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yxy => new(y, x, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yxz => new(y, x, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yyx => new(y, y, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yyy => new(y, y, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yyz => new(y, y, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yzx => new(y, z, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yzy => new(y, z, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 yzz => new(y, z, z);
 
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zxx => new(z, x, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zxy => new(z, x, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zxz => new(z, x, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zyx => new(z, y, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zyy => new(z, y, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zyz => new(z, y, z);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zzx => new(z, z, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zzy => new(z, z, y);
-	[EditorBrowsable(EditorBrowsableState.Never)] public Float3 zzz => new(z, z, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zxx => new(z, x, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zxy => new(z, x, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zxz => new(z, x, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zyx => new(z, y, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zyy => new(z, y, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zyz => new(z, y, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zzx => new(z, z, x);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zzy => new(z, z, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zzz => new(z, z, z);
 
 	public static Float3 PositiveInfinity => new(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
 
 	public override readonly string ToString() => $"({x}, {y}, {z})";
+
+	public readonly Float3 Normalized => this * Rsqrt(SquareMagnitude(this));
+
+	public readonly float HorizontalAngle => Atan(-y / xz.Magnitude);
 
 	// Utility
 	//public static Float3 Select(Bool3 c, Float3 a, Float3 b) => Float3(c.x ? a.x : b.x, c.y ? a.y : b.y, c.z ? a.z : b.z);
@@ -189,16 +193,16 @@ public struct Float3 : IEquatable<Float3>
 		return Dot(a, b) * Rsqrt(SquareMagnitude(a) * SquareMagnitude(b));
 	}
 
-	// Projects a vector onto another vector (Assumes vectors are normalized)
-	public static Float3 Project(Float3 a, Float3 b)
+	// Projects this vector onto another vector (Assumes vectors are normalized)
+	public readonly Float3 Project(Float3 a)
 	{
-		return Dot(a, b) * b;
+		return Dot(this, a) * a;
 	}
 
-	// Projects a vector onto a plane defined by a normal orthongal to the plane (Assumes vectors are normalized)
-	public static Float3 ProjectOnPlane(Float3 a, Float3 b)
+	// Projects this vector onto a plane defined by a normal orthongal to the plane (Assumes vectors are normalized)
+	public readonly Float3 ProjectOnPlane(Float3 a)
 	{
-		return a - Project(a, b);
+		return this - Project(a);
 	}
 
 	public static void SinCos(Float3 a, out Float3 sinA, out Float3 cosA)
