@@ -80,10 +80,10 @@ public static class Geometry
 
 	public static Float3 GetFrustumCorner(Float2 tanHalfFov, float near, float far, FrustumCorner frustumCorner)
 	{
+		var nearWidth = 2 * near * tanHalfFov.x;
 		var nearHeight = 2 * near * tanHalfFov.y;
-		var nearWidth = nearHeight * tanHalfFov.x;
+		var farWidth = 2 * far * tanHalfFov.x;
 		var farHeight = 2 * far * tanHalfFov.y;
-		var farWidth = farHeight * tanHalfFov.x;
 
 		var index = (int)frustumCorner;
 		return index switch
