@@ -304,10 +304,8 @@ public struct Quaternion
 	/// <summary> Calculates a quaternion that rotates from a to b, optimized for normalized inputs </summary>
 	public static Quaternion FromToRotationNormalized(Float3 a, Float3 b)
 	{
-		return UnityEngine.Quaternion.FromToRotation(a, b);
-		var discriminant = 0.5f + 0.5f * Float3.Dot(a, b);
-		var cosHalfAngle = Sqrt(discriminant);
-		return new(Cross(a, b) / (2f * cosHalfAngle), cosHalfAngle);
+		var c = new Float4(Float3.Cross(a, b), Float3.Dot(a, b) + 1f);
+		return (Quaternion)(c * Rsqrt(2f * Float3.Dot(a, b) + 2f));
 	}
 
 	/// <summary> Rotates a by the inverse of b </summary>

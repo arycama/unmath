@@ -28,7 +28,9 @@ public static partial class Math
 	public static int Clamp(int x, int min = 0, int max = 1) => x < min ? min : (x > max ? max : x);
 	public static float Saturate(float x) => Clamp(x);
 	public static float Square(float x) => x * x;
+	public static float Sq(float x) => Square(x);
 	public static int Square(int x) => x * x;
+	public static int Sq(int x) => Square(x);
 	public static float Floor(float x) => MathF.Floor(x);
 	public static int FloorToInt(float x) => (int)Floor(x);
 	public static float Ceil(float x) => MathF.Ceiling(x);

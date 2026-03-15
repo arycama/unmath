@@ -39,6 +39,8 @@ public struct Float4
 
 	public static implicit operator Vector4(Float4 a) => new(a.x, a.y, a.z, a.w);
 
+	public static implicit operator Quaternion(Float4 a) => new(a.x, a.y, a.z, a.w);
+
 	public static float Csum(Float4 a) => (a.x + a.y) + (a.z + a.w);
 
 	public Float4 PerspectiveDivide() => new(xyz * Rcp(w), w);
