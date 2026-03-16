@@ -70,4 +70,10 @@ public struct RigidTransform
 	public readonly RigidTransform DeltaTransform(RigidTransform a) => a.Transform(Inverse);
 
 	public readonly RigidTransform Lerp(RigidTransform a, float t) => new(Float3.Lerp(position, a.position, t), rotation.Slerp(a.rotation, t));
+
+	// Returns X⁻¹ * Y * X
+	public readonly RigidTransform Conjugate(RigidTransform b) => InverseTransform(b.Transform(this));
+
+	// Returns X * Y * X⁻¹
+	public readonly RigidTransform ConjugateInverse(RigidTransform b) => Transform(b.Transform(Inverse));
 }
