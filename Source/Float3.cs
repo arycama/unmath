@@ -280,4 +280,11 @@ public struct Float3 : IEquatable<Float3>
 	}
 
 	public static float TripleProduct(Float3 a, Float3 b, Float3 c) => Dot(a, Cross(b, c));
+
+	public static Float3 Refract(Float3 i, Float3 n, float eta)
+	{
+		var NdotI = Dot(i, n);
+		var k = 1.0f - Sq(eta) * (1.0f - Sq(NdotI));
+		return k < 0.0f ? Zero : eta * i - (eta * NdotI + Math.Sqrt(k)) * n;
+	}
 }
