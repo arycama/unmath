@@ -287,4 +287,9 @@ public struct Float3 : IEquatable<Float3>
 		var k = 1.0f - Sq(eta) * (1.0f - Sq(NdotI));
 		return k < 0.0f ? Zero : eta * i - (eta * NdotI + Math.Sqrt(k)) * n;
 	}
+
+	public static Float3 Refract(Float3 i, Float3 n, float ni, float no)
+	{
+		return Refract(i, n, ni / no);
+	}
 }
