@@ -22,4 +22,6 @@ public struct Int3
 
 	public static bool operator ==(Int3 left, Int3 right) => left.x == right.x && left.y == right.y && left.z == right.z;
 	public static bool operator !=(Int3 left, Int3 right) => left.x != right.x || left.y != right.y || left.z != right.z;
+
+	public readonly override string ToString() => $"({x}, {y}, {z})";
 }

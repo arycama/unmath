@@ -45,6 +45,8 @@ public struct Float2
 	public static Float2 operator /(Float2 a, float b) => new(a.x / b, a.y / b);
 	public static Float2 operator /(float a, Float2 b) => new(a / b.x, a / b.y);
 
+	public readonly void Deconstruct(out float x, out float y) { x = this.x;  y = this.y; }
+
 	public override string ToString() => $"({x}, {y})";
 
 	public readonly float SquareMagnitude => Dot(this);
@@ -79,7 +81,7 @@ public struct Float2
 
 	public static Float2 Radians(Float2 a) => new(Math.Radians(a.x), Math.Radians(a.y));
 	public static Float2 Lerp(Float2 a, Float2 b, float t) => new(Math.Lerp(a.x, b.x, t), Math.Lerp(a.y, b.y, t));
-	
+
 	public readonly float Dot(Float2 a) => x * a.x + y * a.y;
 
 	public static Float2 Abs(Float2 a) => new(Math.Abs(a.x), Math.Abs(a.y));

@@ -239,4 +239,14 @@ public static partial class Math
 	public static float AngularDiameterToSolidAngle(float angularDiameter) => TwoPi * (1 - AngularDiameterToConeCosAngle(angularDiameter));
 
 	public static float ConeCosAngleToSolidAngle(float coneCosAngle) => TwoPi * (1 - coneCosAngle);
+
+	public static int BitPack(int data, int size, int offset)
+	{
+		return (data & ((1 << size) - 1)) << offset;
+	}
+
+	public static int BitUnpack(int data, int size, int offset)
+	{
+		return (data >> offset) & ((1 << size) - 1);
+	}
 }
