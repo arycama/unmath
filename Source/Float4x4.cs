@@ -54,10 +54,10 @@ public struct Float4x4
 	public readonly float m21 => c1.z;
 	public readonly float m31 => c1.w;
 
-	public readonly float m02 => c2.x;
-	public readonly float m12 => c2.y;
-	public readonly float m22 => c2.z;
-	public readonly float m32 => c2.w;
+	public float m02 { readonly get => c2.x; set => c2.x = value; }
+	public float m12 { readonly get => c2.y; set => c2.y = value; }
+	public float m22 { readonly get => c2.z; set => c2.z = value; }
+	public float m32 { readonly get => c2.w; set => c2.w = value; }
 
 	public readonly float m03 => c3.x;
 	public readonly float m13 => c3.y;
