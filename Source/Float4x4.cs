@@ -15,22 +15,41 @@ public struct Float4x4
 		this.c3 = c3;
 	}
 
+	public Float4x4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33) : this(new(m00, m10, m20, m30), new(m01, m11, m21, m31), new(m02, m12, m22, m32), new(m03, m13, m23, m33)) { }
+
     public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
 
 	public static Float4x4 Identity => new(Right, Up, Forward, new(0, 0, 0, 1));
 
-    public static Float4x4 Ortho(float left, float right, float bottom, float top, float near, float far)
-	{
-		// TODO: Implement properly
-		var matrix = Matrix4x4.Ortho(left, right, bottom, top, near, far);
-		matrix.SetColumn(2, -matrix.GetColumn(2));
-		return matrix;
-	}
+	public static Float4x4 Ortho(float left, float right, float bottom, float top, float near, float far) => new
+	(
+		2 / (right - left), 0, 0, (right + left) / (left - right),
+		0, 2 / (top - bottom), 0, (top + bottom) / (bottom - top),
+		0, 0, 2 / (far - near), (far + near) / (near - far),
+		0, 0, 0, 1
+	);
 
-	public static Float4x4 Ortho(Bounds bounds)
-	{
-		return Ortho(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
-	}
+	public static Float4x4 Ortho(Bounds bounds) => Ortho(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
+
+	public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far) => new
+	(
+		2 / (right - left), 0, 0, (right + left) / (left - right),
+		0, 2 / (top - bottom), 0, (top + bottom) / (bottom - top),
+		0, 0, Rcp(near - far), far / (far - near),
+		0, 0, 0, 1
+	);
+
+	public static Float4x4 OrthoReverseZ(Bounds bounds) => OrthoReverseZ(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
+
+	public static Float4x4 OrthoReverseZSample(float left, float right, float bottom, float top, float near, float far) => new
+	(
+		Rcp(right - left), 0, 0, -left / (right - left),
+		0, Rcp(bottom - top), 0, top / (top - bottom),
+		0, 0, Rcp(near - far), far / (far - near),
+		0, 0, 0, 1
+	);
+
+	public static Float4x4 OrthoReverseZSample(Bounds bounds) => OrthoReverseZSample(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
 
 	public static Float4x4 Perspective(float fov, float aspect, float near, float far)
 	{
