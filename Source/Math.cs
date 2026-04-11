@@ -229,7 +229,7 @@ public static partial class Math
 	public static Float3 ClosestPointOnLine(Float3 linePoint, Float3 lineDirection, Float3 point)
 	{
 		var AP = point - linePoint;
-		var t = Float3.Dot(AP, lineDirection); // If lineDir is normalized, If lineDir is not normalized: t = Float3.Dot(AP, lineDir) / lineDir.sqrMagnitude;
+		var t = AP.Dot(lineDirection); // If lineDir is normalized, If lineDir is not normalized: t = Float3.Dot(AP, lineDir) / lineDir.sqrMagnitude;
 		var closestPoint = linePoint + t * lineDirection;
 		return closestPoint;
 	}

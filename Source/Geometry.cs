@@ -9,9 +9,9 @@ public static class Geometry
 	// Assume Sphere is at the origin (i.e start = position - spherePosition)
 	public static bool TryIntersectRaySphere(Float3 rayOrigin, Float3 rayDirection, float radius, out float r0, out float r1)
 	{
-		var a = Float3.SquareMagnitude(rayDirection);
-		var b = Float3.Dot(rayDirection, rayOrigin) * 2;
-		var c = Float3.SquareMagnitude(rayOrigin) - Square(radius);
+		var a = rayDirection.SquareMagnitude;
+		var b = rayDirection.Dot(rayOrigin) * 2;
+		var c = rayOrigin.SquareMagnitude - Square(radius);
 		return Quadratic(a, b, c, out r0, out r1);
 	}
 
@@ -32,8 +32,8 @@ public static class Geometry
 	// Ref: http://http.developer.nvidia.com/GPUGems/gpugems_ch19.html
 	public static float IntersectRaySphereSimple(Float3 start, Float3 dir, float radius)
 	{
-		var b = Float3.Dot(dir, start) * 2.0f;
-		var c = Float3.Dot(start, start) - radius * radius;
+		var b = dir.Dot(start) * 2.0f;
+		var c = start.Dot(start) - radius * radius;
 		var discriminant = b * b - 4.0f * c;
 
 		return Abs(Sqrt(discriminant) - b) * 0.5f;
@@ -41,9 +41,9 @@ public static class Geometry
 
 	public static float IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal, out bool isValid)
 	{
-		var denominator = Float3.Dot(planeNormal, rayDirection);
+		var denominator = planeNormal.Dot(rayDirection);
 		isValid = Abs(denominator) > 1e-6f;
-		return Float3.Dot(planeNormal, planeOrigin - rayOrigin) / denominator;
+		return planeNormal.Dot(planeOrigin - rayOrigin) / denominator;
 	}
 
 	public static float IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal)

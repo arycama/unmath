@@ -138,49 +138,49 @@ public struct Float3 : IEquatable<Float3>
 
 	public override readonly string ToString() => $"({x}, {y}, {z})";
 
-	public readonly Float3 Normalized => this * Rsqrt(SquareMagnitude(this));
-
+	public readonly Float3 Cross(Float3 b) => yzx * b.zxy - zxy * b.yzx;
+	public readonly float Dot(Float3 b) => x * b.x + y * b.y + z * b.z;
 	public readonly float HorizontalAngle => Atan(-y / xz.Magnitude);
+	public readonly float Magnitude => Math.Sqrt(SquareMagnitude);
+	public readonly float RcpMagnitude => Rsqrt(SquareMagnitude);
+	public readonly Float3 Normalized => this * Rsqrt(SquareMagnitude);
+	public readonly float SquareMagnitude => Dot(this);
 
 	// Utility
 	//public static Float3 Select(Bool3 c, Float3 a, Float3 b) => Float3(c.x ? a.x : b.x, c.y ? a.y : b.y, c.z ? a.z : b.z);
 
 	// Common math
 	public static Float3 Square(Float3 a) => a * a;
+
 	public static Float3 Sqrt(Float3 a) => new(Math.Sqrt(a.x), Math.Sqrt(a.y), Math.Sqrt(a.z));
+
 	public static Float3 Lerp(Float3 a, Float3 b, float t) => new(Math.Lerp(a.x, b.x, t), Math.Lerp(a.y, b.y, t), Math.Lerp(a.z, b.z, t));
-	public static Float3 Cross(Float3 a, Float3 b) => a.yzx * b.zxy - a.zxy * b.yzx;
 
 	public static float Angle(Float3 a, Float3 b)
 	{
-		var squareMagnitudeProduct = SquareMagnitude(a) * SquareMagnitude(b);
-		return squareMagnitudeProduct == 0 ? 0 : Acos(Dot(a, b) * Rsqrt(squareMagnitudeProduct));
+		var squareMagnitudeProduct = a.SquareMagnitude * b.SquareMagnitude;
+		return squareMagnitudeProduct == 0 ? 0 : Acos(a.Dot(b) * Rsqrt(squareMagnitudeProduct));
 	}
 
-	public static float SignedAngle(Float3 a, Float3 b, Float3 axis) => Angle(a, b) * Sign(Dot(axis, Cross(a, b)));
+	public static float SignedAngle(Float3 a, Float3 b, Float3 axis) => Angle(a, b) * Sign(axis.Dot(a.Cross(b)));
 
-	public static float Dot(Float3 a, Float3 b) => a.x * b.x + a.y * b.y + a.z * b.z;
+	public static float Distance(Float3 a, Float3 b) => (b - a).Magnitude;
 
-	public static float SquareMagnitude(Float3 a) => Dot(a, a);
+	public readonly Float3 Abs => new(Math.Abs(x), Math.Abs(y), Math.Abs(z));
 
-	public static float Magnitude(Float3 a) => Math.Sqrt(SquareMagnitude(a));
+	public readonly float MinComponent => Math.Min(x, Math.Min(y, z));
 
-	public static float Distance(Float3 a, Float3 b) => Magnitude(b - a);
+	public readonly float MaxComponent => Math.Max(x, Math.Max(y, z));
 
-	public Float3 Abs => new(Math.Abs(x), Math.Abs(y), Math.Abs(z));
+	public readonly Float3 Rcp => new(Math.Rcp(x), Math.Rcp(y), Math.Rcp(z));
 
-	public float MinComponent => Math.Min(x, Math.Min(y, z));
+	public static Float3 Normalize(Float3 a) => a.Normalized;
 
-	public float MaxComponent => Math.Max(x, Math.Max(y, z));
-
-	public Float3 Rcp => new(Math.Rcp(x), Math.Rcp(y), Math.Rcp(z));
-
-	public static Float3 Normalize(Float3 a) => a * Rsqrt(SquareMagnitude(a));
 	public static Float3 FromTo(Float3 a, Float3 b) => Normalize(b - a);
 
 	public static Float3 ClampMagnitude(Float3 a, float maxMagnitude)
 	{
-		var squareMagnitude = SquareMagnitude(a);
+		var squareMagnitude = a.SquareMagnitude;
 		if (squareMagnitude <= Math.Square(maxMagnitude))
 			return a;
 
@@ -190,13 +190,13 @@ public struct Float3 : IEquatable<Float3>
 
 	public static float CosAngle(Float3 a, Float3 b)
 	{
-		return Dot(a, b) * Rsqrt(SquareMagnitude(a) * SquareMagnitude(b));
+		return a.Dot(b) * Rsqrt(a.SquareMagnitude * b.SquareMagnitude);
 	}
 
 	// Projects this vector onto another vector (Assumes vectors are normalized)
 	public readonly Float3 Project(Float3 a)
 	{
-		return Dot(this, a) * a;
+		return Dot(a) * a;
 	}
 
 	// Projects this vector onto a plane defined by a normal orthongal to the plane (Assumes vectors are normalized)
@@ -238,7 +238,7 @@ public struct Float3 : IEquatable<Float3>
 	public static Float3 SlerpNormalized(Float3 a, Float3 b, float t)
 	{
 		// Calculate angle between vectors
-		var dot = Dot(a, b);
+		var dot = a.Dot(b);
 		var theta = Acos(dot) * t;
 		var relativeVec = Normalize(b - a * dot);
 		return a * Cos(theta) + relativeVec * Sin(theta);
@@ -275,15 +275,15 @@ public struct Float3 : IEquatable<Float3>
 
 		// Project av onto ab and get the magnitude ratio
 		// This gives the percentage along the line from a to b
-		var ab2 = Dot(ab, ab);
-		return ab2 == 0.0f ? 0.0f : Float3.Dot(av, ab) / ab2;
+		var ab2 = ab.Dot(ab);
+		return ab2 == 0.0f ? 0.0f : av.Dot(ab) / ab2;
 	}
 
-	public static float TripleProduct(Float3 a, Float3 b, Float3 c) => Dot(a, Cross(b, c));
+	public static float TripleProduct(Float3 a, Float3 b, Float3 c) => a.Dot(b.Cross(c));
 
 	public static Float3 Refract(Float3 i, Float3 n, float eta)
 	{
-		var NdotI = Dot(i, n);
+		var NdotI = i.Dot(n);
 		var k = 1.0f - Sq(eta) * (1.0f - Sq(NdotI));
 		return k < 0.0f ? Zero : eta * i - (eta * NdotI + Math.Sqrt(k)) * n;
 	}

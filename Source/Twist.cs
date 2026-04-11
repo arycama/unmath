@@ -25,6 +25,6 @@ public struct Twist
 	public Twist AddForceAtPoint(Float3 force, Float3 point, Float3 centerOfMass)
 	{
 		var result = AddForce(force);
-		return result.AddTorque(Float3.Cross(point - centerOfMass, force));
+		return result.AddTorque((point - centerOfMass).Cross(force));
 	}
 }

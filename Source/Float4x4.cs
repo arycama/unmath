@@ -74,7 +74,7 @@ public struct Float4x4
 		right.x, right.y, right.z, 0, 
 		up.x, up.y, up.z, 0, 
 		forward.x, forward.y, forward.z, 0,
-		Dot(right, -position), Dot(up, -position), Dot(forward, -position)
+		right.Dot(-position), up.Dot(-position), forward.Dot(-position)
 	);
 
 	public static Float4x4 WorldToLocal(Float3 position, Quaternion rotation) => WorldToLocal(rotation.Right, rotation.Up, rotation.Forward, position);
@@ -120,7 +120,6 @@ public struct Float4x4
 	(
 		m00: tanHalfFov.x,
 		m11: tanHalfFov.y,
-		m22: 0,
 		m23: 1.0f,
 		m32: (far - near) / (near * far),
 		m33: 1.0f / far
@@ -145,9 +144,7 @@ public struct Float4x4
 			m00: m00,
 			m11: flip ? -m11 : m11,
 			m02: -(tanHalfFov.x + tanHalfFov.x * jitter.x) + (halfTexel ? (0.5f * m00) : 0.0f),
-			m12: (flip ? -m12 : m12) + (halfTexel ? 0.5f * (flip ? -m11 : m11) : 0.0f),
-			m22: 1.0f,
-			m33: 1.0f
+			m12: (flip ? -m12 : m12) + (halfTexel ? 0.5f * (flip ? -m11 : m11) : 0.0f)
 		);
 	}
 
@@ -171,4 +168,20 @@ public struct Float4x4
 		c0 * b.m02 + c1 * b.m12 + c2 * b.m22 + c3 * b.m32,
 		c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
 	);
+
+	public readonly Float4 FrustumPlane(int index)
+	{
+		var plane = index switch
+		{
+			0 => r3 + r0,
+			1 => r3 - r0,
+			2 => r3 + r1,
+			3 => r3 - r1,
+			4 => r3 + r2,
+			5 => r3 - r2,
+			_ => throw new ArgumentOutOfRangeException(nameof(index), "Index must be between 0 and 5"),
+		};
+
+		return plane * plane.xyz.RcpMagnitude;
+	}
 }

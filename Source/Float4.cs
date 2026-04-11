@@ -27,9 +27,12 @@ public struct Float4
 	public readonly Float4 PerspectiveDivide => new(xyz * Rcp(w), w);
 
 	public static Float4 operator +(Float4 a, Float4 b) => new(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+	public static Float4 operator -(Float4 a, Float4 b) => new(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 	public static Float4 operator *(float a, Float4 b) => new(a * b.x, a * b.y, a * b.z, a * b.w);
 	public static Float4 operator *(Float4 a, float b) => new(a.x * b, a.y * b, a.z * b, a.w * b);
 	public static Float4 operator *(Float4 a, Float4 b) => new(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+
+	public static explicit operator Float3(Float4 a) => new(a.x, a.y, a.z);
 
 	public static implicit operator Float4(Float2 a) => new(a.x, a.y, 0f, 0f);
 	public static implicit operator Float4(Float3 a) => new(a.x, a.y, a.z, 0f);
@@ -41,6 +44,7 @@ public struct Float4
 	public static implicit operator Float4(Vector4 a) => new(a.x, a.y, a.z, a.w);
 
 	public static implicit operator Vector4(Float4 a) => new(a.x, a.y, a.z, a.w);
+	public static implicit operator Plane(Float4 a) => new(a.xyz, a.w);
 
 	public static implicit operator Quaternion(Float4 a) => new(a.x, a.y, a.z, a.w);
 

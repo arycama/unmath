@@ -208,7 +208,7 @@ public struct Quaternion
 	/// <summary> Calculates the axis quaternion rotates around, and the angle it rotates around that axis in radians </summary>
 	public static void AngleAxis(Quaternion a, out float angle, out Float3 axis)
 	{
-		var sinHalfThetaSq = SquareMagnitude(a.xyz);
+		var sinHalfThetaSq = a.xyz.SquareMagnitude;
 		var sinHalfTheta = Sqrt(sinHalfThetaSq);
 		angle = 2f * Atan2(sinHalfTheta, a.w);
 		axis = sinHalfTheta == 0.0f ? Float3.Right : a.xyz / sinHalfTheta;
@@ -304,8 +304,8 @@ public struct Quaternion
 	/// <summary> Calculates a quaternion that rotates from a to b, optimized for normalized inputs </summary>
 	public static Quaternion FromToRotationNormalized(Float3 a, Float3 b)
 	{
-		var c = new Float4(Float3.Cross(a, b), Float3.Dot(a, b) + 1f);
-		return (Quaternion)(c * Rsqrt(2f * Float3.Dot(a, b) + 2f));
+		var c = new Float4(a.Cross(b), a.Dot(b) + 1f);
+		return (Quaternion)(c * Rsqrt(2f * a.Dot(b) + 2f));
 	}
 
 	/// <summary> Rotates a by the inverse of b </summary>
@@ -318,7 +318,7 @@ public struct Quaternion
 	{
 		return Normalize(current.Rotate(new Quaternion(0.5f * Time.deltaTime * velocity, 1)));
 
-		var w = SquareMagnitude(velocity);
+		var w = velocity.SquareMagnitude;
 
         if (w == 0.0f)
             return current;
@@ -337,8 +337,8 @@ public struct Quaternion
 	{
 		// TODO: FIx issues with forward == up
 		return UnityEngine.Quaternion.LookRotation(forward, up);
-		var right = Float3.Normalize(Cross(up, forward));
-		return new(new Float3x3(right, Cross(forward, right), forward));
+		var right = Float3.Normalize(up.Cross(forward));
+		return new(new Float3x3(right, forward.Cross(right), forward));
 	}
 
 	/// <summary> Calculates a quaternion with the specified forward direction, with world up </summary>
@@ -357,12 +357,12 @@ public struct Quaternion
 	/// <summary> Rotates a point by this quaternion </summary>
 	public readonly Float3 Rotate(Float3 a)
 	{
-		var t = 2 * Cross(xyz, a);
-		return a + w * t + Cross(xyz, t);
+		var t = 2 * xyz.Cross(a);
+		return a + w * t + xyz.Cross(t);
 	}
 
 	/// <summary> Rotates a quaternion by this quaternion </summary>
-	public readonly Quaternion Rotate(Quaternion a) => new(xyz * a.w + a.xyz * w + Cross(xyz, a.xyz), w * a.w - Float3.Dot(xyz, a.xyz));
+	public readonly Quaternion Rotate(Quaternion a) => new(xyz * a.w + a.xyz * w + xyz.Cross(a.xyz), w * a.w - xyz.Dot(a.xyz));
 
 	/// <summary> Rotates a point a around point b by this quaternion </summary>
 	public readonly Float3 RotateAround(Float3 a, Float3 b) => Rotate(a - b) + b;
