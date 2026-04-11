@@ -14,6 +14,7 @@ public struct Float2
 	}
 
 	public readonly Float2 yx => new(y, x);
+	public readonly Float3 xxy => new(x, x, y);
 
 	public static Float2 Zero => new(0, 0);
 
