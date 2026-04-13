@@ -120,6 +120,7 @@ public struct Float4x4
 	(
 		m00: tanHalfFov.x,
 		m11: tanHalfFov.y,
+		m22: 0.0f,
 		m23: 1.0f,
 		m32: (far - near) / (near * far),
 		m33: 1.0f / far
