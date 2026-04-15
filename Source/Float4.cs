@@ -49,4 +49,5 @@ public struct Float4
 	public static implicit operator Quaternion(Float4 a) => new(a.x, a.y, a.z, a.w);
 
 	public static float Csum(Float4 a) => (a.x + a.y) + (a.z + a.w);
+	public readonly void Deconstruct(out float x, out float y, out float z, out float w) { x = this.x; y = this.y; z = this.z; w = this.w; }
 }

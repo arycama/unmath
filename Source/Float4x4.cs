@@ -5,6 +5,26 @@ using static Float3;
 
 public struct Float4x4
 {
+	public static readonly Float3[] lookAtList =
+	{
+		new(1.0f, 0.0f, 0.0f),
+		new(-1.0f, 0.0f, 0.0f),
+		new(0.0f, 1.0f, 0.0f),
+		new(0.0f, -1.0f, 0.0f),
+		new(0.0f, 0.0f, 1.0f),
+		new(0.0f, 0.0f, -1.0f),
+	};
+
+	public static readonly Float3[] upVectorList =
+	{
+		new(0.0f, 1.0f, 0.0f),
+		new(0.0f, 1.0f, 0.0f),
+		new(0.0f, 0.0f, -1.0f),
+		new(0.0f, 0.0f, 1.0f),
+		new(0.0f, 1.0f, 0.0f),
+		new(0.0f, 1.0f, 0.0f),
+	};
+
 	public Float4 c0, c1, c2, c3;
 
 	public Float4x4(Float4 c0, Float4 c1, Float4 c2, Float4 c3)
@@ -39,10 +59,10 @@ public struct Float4x4
 	public float m23 { readonly get => c3.z; set => c3.z = value; }
 	public float m33 { readonly get => c3.w; set => c3.w = value; }
 
-	public readonly Float4 r0 => new(c0.x, c1.x, c2.x, c3.x);
-	public readonly Float4 r1 => new(c0.y, c1.y, c2.y, c3.y);
-	public readonly Float4 r2 => new(c0.z, c1.z, c2.z, c3.z);
-	public readonly Float4 r3 => new(c0.w, c1.w, c2.w, c3.w);
+	public Float4 r0 { readonly get => new(c0.x, c1.x, c2.x, c3.x); set => (c0.x, c1.x, c2.x, c3.x) = value; }
+	public Float4 r1 { readonly get => new(c0.y, c1.y, c2.y, c3.y); set => (c0.y, c1.y, c2.y, c3.y) = value; }
+	public Float4 r2 { readonly get => new(c0.z, c1.z, c2.z, c3.z); set => (c0.z, c1.z, c2.z, c3.z) = value; }
+	public Float4 r3 { readonly get => new(c0.w, c1.w, c2.w, c3.w); set => (c0.w, c1.w, c2.w, c3.w) = value; }
 
 	public readonly float Determinant =>
 			c0.x * TripleProduct(c1.yzw, c2.yzw, c3.yzw) -
@@ -71,10 +91,9 @@ public struct Float4x4
 
 	public static Float4x4 WorldToLocal(Float3 right, Float3 up, Float3 forward, Float3 position) => new
 	(
-		right.x, right.y, right.z, 0, 
-		up.x, up.y, up.z, 0, 
-		forward.x, forward.y, forward.z, 0,
-		right.Dot(-position), up.Dot(-position), forward.Dot(-position)
+		right.x, right.y, right.z, right.Dot(-position),
+		up.x, up.y, up.z, up.Dot(-position),
+		forward.x, forward.y, forward.z, forward.Dot(-position)
 	);
 
 	public static Float4x4 WorldToLocal(Float3 position, Quaternion rotation) => WorldToLocal(rotation.Right, rotation.Up, rotation.Forward, position);
@@ -102,6 +121,17 @@ public struct Float4x4
 		m00: Rcp(right - left), m03: -left / (right - left),
 		m11: Rcp(bottom - top), m13: top / (top - bottom),
 		m22: Rcp(near - far), m23: far / (far - near)
+	);
+
+	// TODO: I think this is just an ortho matrix? Remove or refactor
+	public static Float4x4 OrthoOffCenterNormalized(float left, float right, float bottom, float top, float near, float far) => new
+	(
+		m00: 1.0f / (right - left),
+		m03: left / (left - right),
+		m11: 1.0f / (top - bottom),
+		m13: bottom / (bottom - top),
+		m22: 1.0f / (far - near),
+		m23: near / (near - far)
 	);
 
 	public static Float4x4 OrthoReverseZSample(Bounds bounds) => OrthoReverseZSample(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
@@ -138,7 +168,7 @@ public struct Float4x4
 	{
 		var m00 = 2.0f * tanHalfFov.x / size.x;
 		var m11 = 2.0f * tanHalfFov.y / size.y;
-		var m12 = -(tanHalfFov.y + tanHalfFov.y * jitter.y);
+		var m12 = (tanHalfFov.y + tanHalfFov.y * jitter.y);
 
 		return new
 		(
@@ -170,19 +200,19 @@ public struct Float4x4
 		c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
 	);
 
-	public readonly Float4 FrustumPlane(int index)
+	public readonly Float4 GetFrustumPlane(FrustumPlane plane)
 	{
-		var plane = index switch
+		var result = plane switch
 		{
-			0 => r3 + r0,
-			1 => r3 - r0,
-			2 => r3 + r1,
-			3 => r3 - r1,
-			4 => r3 + r2,
-			5 => r3 - r2,
-			_ => throw new ArgumentOutOfRangeException(nameof(index), "Index must be between 0 and 5"),
+			FrustumPlane.Left => r3 + r0,
+			FrustumPlane.Right => r3 - r0,
+			FrustumPlane.Down => r3 + r1,
+			FrustumPlane.Up => r3 - r1,
+			FrustumPlane.Near => r3 + r2,
+			FrustumPlane.Far => r3 - r2,
+			_ => throw new ArgumentOutOfRangeException(nameof(plane), "Index must be between 0 and 5"),
 		};
 
-		return plane * plane.xyz.RcpMagnitude;
+		return result * result.xyz.RcpMagnitude;
 	}
 }

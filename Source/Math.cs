@@ -132,7 +132,13 @@ public static partial class Math
 	public static float Mod(float x, float y)
 	{
 		var remainder = x % y;
-		return remainder >= 0 ? remainder : remainder + y;
+		return remainder < 0.0f ? remainder + y : remainder;
+	}
+
+	public static int Mod(int x, int y)
+	{
+		var remainder = x % y;
+		return remainder < 0 ? remainder + y : remainder;
 	}
 
 	public static float WrapAngle(float x) => Mod(x, TwoPi);
