@@ -168,7 +168,7 @@ public struct Float4x4
 	{
 		var m00 = 2.0f * tanHalfFov.x / size.x;
 		var m11 = 2.0f * tanHalfFov.y / size.y;
-		var m12 = (tanHalfFov.y + tanHalfFov.y * jitter.y);
+		var m12 = -(tanHalfFov.y + tanHalfFov.y * jitter.y);
 
 		return new
 		(
