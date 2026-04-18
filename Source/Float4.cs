@@ -18,7 +18,7 @@ public struct Float4
 	public Float4(Float3 xyz, float w) : this(xyz.x, xyz.y, xyz.z, w) { }
 
 	public Float2 xy { readonly get => new(x, y); set { (x, y) = value; } }
-	public readonly Float3 xyz => new(x, y, z);
+	public Float3 xyz { readonly get  => new(x, y, z); set { (x, y, z) = value; } }
 	public readonly Float3 yzw => new(y, z, w);
 
 	public readonly Float4 wwww => new(w, w, w, w);

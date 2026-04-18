@@ -208,8 +208,8 @@ public struct Float4x4
 			FrustumPlane.Right => r3 - r0,
 			FrustumPlane.Down => r3 + r1,
 			FrustumPlane.Up => r3 - r1,
-			FrustumPlane.Near => r3 + r2,
-			FrustumPlane.Far => r3 - r2,
+			FrustumPlane.Near => r3 - r2,
+			FrustumPlane.Far => r3 + r2,
 			_ => throw new ArgumentOutOfRangeException(nameof(plane), "Index must be between 0 and 5"),
 		};
 
