@@ -135,6 +135,7 @@ public struct Float3 : IEquatable<Float3>
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float3 zzz => new(z, z, z);
 
 	public static Float3 PositiveInfinity => new(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
+	public static Float3 NegativeInfinity => new(float.NegativeInfinity, float.NegativeInfinity, float.NegativeInfinity);
 
 	public override readonly string ToString() => $"({x}, {y}, {z})";
 

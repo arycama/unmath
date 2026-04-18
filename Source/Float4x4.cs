@@ -64,6 +64,13 @@ public struct Float4x4
 	public Float4 r2 { readonly get => new(c0.z, c1.z, c2.z, c3.z); set => (c0.z, c1.z, c2.z, c3.z) = value; }
 	public Float4 r3 { readonly get => new(c0.w, c1.w, c2.w, c3.w); set => (c0.w, c1.w, c2.w, c3.w) = value; }
 
+	public readonly Float3 Right => c0.xyz;
+	public readonly Float3 Up => c1.xyz;
+	public readonly Float3 Forward => c2.xyz;
+
+	public readonly Quaternion Rotation => new(Right, Up, Forward);
+	public readonly Float3 Translation => c3.xyz;
+
 	public readonly float Determinant =>
 			c0.x * TripleProduct(c1.yzw, c2.yzw, c3.yzw) -
 			c1.x * TripleProduct(c0.yzw, c2.yzw, c3.yzw) +
