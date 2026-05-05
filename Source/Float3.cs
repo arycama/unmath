@@ -95,7 +95,7 @@ public struct Float3 : IEquatable<Float3>
 	public static bool operator !=(Float3 a, Float3 b) => a.x != b.x || a.y != b.y || a.z != b.z;
 
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xx => new(x, x);
-	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xy => new(x, y);
+	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xy { readonly get => new(x, y); set => (x, y) = (value.x, value.y); }
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xz => new(x, z);
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yx => new(y, x);
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yy => new(y, y);
