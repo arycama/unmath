@@ -35,7 +35,7 @@ public struct Float4x4
 		this.c3 = c3;
 	}
 
-	public Float4x4(float m00 = 1, float m01 = 0, float m02 = 0, float m03 = 0, float m10 = 0, float m11 = 1, float m12 = 0, float m13 = 0, float m20 = 0, float m21 = 0, float m22 = 1, float m23 = 0, float m30 = 0, float m31 = 0, float m32 = 0, float m33 = 1) : this(new(m00, m10, m20, m30), new(m01, m11, m21, m31), new(m02, m12, m22, m32), new(m03, m13, m23, m33)) { }
+	public Float4x4(float m00 = 1, float m01 = 0, float m02 = 0, float m03 = 0, float m10 = 0, float m11 = 1, float m12 = 0, float m13 = 0, float m20 = 0, float m21 = 0, float m22 = 1, float m23 = 0, float m30 = 0, float m31 = 0, float m32 = 0, float m33 = 1) : this(new Float4(m00, m10, m20, m30), new Float4(m01, m11, m21, m31), new Float4(m02, m12, m22, m32), new Float4(m03, m13, m23, m33)) { }
 
 	public Float4x4(Quaternion q) : this(q.Right, q.Up, q.Forward, new(0, 0, 0, 1)) { }
 
