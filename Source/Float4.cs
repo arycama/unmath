@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using static Math;
 
+[Serializable]
 public struct Float4
 {
 	public float x, y, z, w;
@@ -14,16 +16,17 @@ public struct Float4
 	}
 
 	public Float4(Float2 xy, Float2 zw) : this(xy.x, xy.y, zw.x, zw.y) { }
-
 	public Float4(Float3 xyz, float w) : this(xyz.x, xyz.y, xyz.z, w) { }
 
 	public Float2 xy { readonly get => new(x, y); set { (x, y) = value; } }
 	public Float3 xyz { readonly get  => new(x, y, z); set { (x, y, z) = value; } }
-	public readonly Float3 yzw => new(y, z, w);
 
+	public readonly Float3 yzw => new(y, z, w);
 	public readonly Float4 wwww => new(w, w, w, w);
 	public readonly Float4 yzxw => new(y, z, x, w);
 
+	public static Float4 Zero => new(0, 0, 0, 0);
+	public static Float4 One => new(1, 1, 1, 1);
 	public readonly Float4 PerspectiveDivide => new(xyz * Rcp(w), w);
 
 	public static Float4 operator +(Float4 a, Float4 b) => new(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
@@ -50,8 +53,7 @@ public struct Float4
 
 	public static implicit operator Quaternion(Float4 a) => new(a.x, a.y, a.z, a.w);
 
-	public static Float4 Zero => new(0, 0, 0, 0);
-	public static Float4 One => new(1, 1, 1, 1);
+	public override string ToString() => $"({x}, {y}, {z}, {w})";
 
 	public static float Csum(Float4 a) => (a.x + a.y) + (a.z + a.w);
 	public readonly void Deconstruct(out float x, out float y, out float z, out float w) { x = this.x; y = this.y; z = this.z; w = this.w; }
