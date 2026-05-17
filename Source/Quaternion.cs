@@ -162,6 +162,15 @@ public struct Quaternion
 		return 2.0f * HalfAngle(a);
 	}
 
+	/// <summary> Calculates the axis quaternion rotates around, and the angle it rotates around that axis in radians </summary>
+	public readonly void AngleAxis(out float angle, out Float3 axis)
+	{
+		var sinHalfThetaSq = xyz.SquareMagnitude;
+		var sinHalfTheta = Sqrt(sinHalfThetaSq);
+		angle = 2f * Atan2(sinHalfTheta, w);
+		axis = sinHalfTheta == 0.0f ? Float3.Right : xyz / sinHalfTheta;
+	}
+
 	/// <summary> Calculates the angles in degrees that a quaternion would rotate by </summary>
 	public readonly Float3 EulerAngles
 	{
@@ -207,15 +216,6 @@ public struct Quaternion
 		return new(axis * sinHalfAngle, cosHalfAngle);
 	}
 
-	/// <summary> Calculates the axis quaternion rotates around, and the angle it rotates around that axis in radians </summary>
-	public static void AngleAxis(Quaternion a, out float angle, out Float3 axis)
-	{
-		var sinHalfThetaSq = a.xyz.SquareMagnitude;
-		var sinHalfTheta = Sqrt(sinHalfThetaSq);
-		angle = 2f * Atan2(sinHalfTheta, a.w);
-		axis = sinHalfTheta == 0.0f ? Float3.Right : a.xyz / sinHalfTheta;
-	}
-
 	/// <summary> Calculates the angular difference to reach quaternion a from quaternion b </summary>
 	public static Float3 AngularErrorIdentity(Quaternion a)
 	{
@@ -225,7 +225,7 @@ public struct Quaternion
 		if (deltaRotation.w < 0)
 			deltaRotation = -deltaRotation;
 
-		AngleAxis(deltaRotation, out var angle, out var axis);
+		deltaRotation.AngleAxis(out var angle, out var axis);
 		return axis * angle;
 	}
 
@@ -238,7 +238,7 @@ public struct Quaternion
 		if (deltaRotation.w < 0)
 			deltaRotation = -deltaRotation;
 
-		AngleAxis(deltaRotation, out angle, out var axis);
+		deltaRotation.AngleAxis(out angle, out var axis);
 		return axis * angle;
 	}
 
@@ -256,7 +256,7 @@ public struct Quaternion
 		if (deltaRotation.w < 0)
 			deltaRotation = -deltaRotation;
 
-		AngleAxis(deltaRotation, out var angle, out var axis);
+		deltaRotation.AngleAxis(out var angle, out var axis);
 		return axis * angle;
 	}
 

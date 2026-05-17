@@ -96,7 +96,7 @@ public struct Float3 : IEquatable<Float3>
 
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xx => new(x, x);
 	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xy { readonly get => new(x, y); set => (x, y) = (value.x, value.y); }
-	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 xz => new(x, z);
+	[EditorBrowsable(EditorBrowsableState.Never)] public Float2 xz { readonly get => new(x, z); set => (x, z) = (value.x, value.y); }
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yx => new(y, x);
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yy => new(y, y);
 	[EditorBrowsable(EditorBrowsableState.Never)] public readonly Float2 yz => new(y, z);

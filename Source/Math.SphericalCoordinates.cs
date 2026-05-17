@@ -37,7 +37,7 @@ public static partial class Math
 
 	public static Float2 QuaternionToSpherical(Quaternion a)
 	{
-		Quaternion.AngleAxis(a, out _, out var axis);
+		a.AngleAxis(out _, out var axis);
 		return new(WrapAngle(Atan2(axis.y, axis.x)), Acos(axis.z));
 	}
 }
