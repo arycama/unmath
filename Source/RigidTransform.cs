@@ -51,8 +51,9 @@ public struct RigidTransform
 
 	public readonly Float3 TransformPosition(Float3 a) => Transform(a).position;
 
-	public readonly Quaternion TransformRotation(Quaternion a) => Transform(a).rotation;
+	public readonly Float3 TransformVector(Float3 a) => rotation.Rotate(a);
 
+	public readonly Quaternion TransformRotation(Quaternion a) => Transform(a).rotation;
 
 	public readonly RigidTransform InverseTransform(RigidTransform a) => Inverse.Transform(a);
 
