@@ -399,4 +399,10 @@ public static partial class Math
 	{
 		return MicrometerToMeter(NanometerToMicrometer(a));
 	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float GramToKilogram(float a)
+	{
+		return a / 1000;
+	}
 }
