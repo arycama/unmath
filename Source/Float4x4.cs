@@ -143,12 +143,14 @@ public struct Float4x4
 
 	public static Float4x4 OrthoReverseZSample(Bounds bounds) => OrthoReverseZSample(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
 
-	public static Float4x4 PerspectiveReverseZ(Float2 tanHalfFov, float near, float far) => new
+	public static Float4x4 PerspectiveReverseZ(Float2 tanHalfFov, float near, float far, Float2 offset = default, bool isFlipped = false) => new
 	(
 		m00: 1.0f / tanHalfFov.x,
-		m11: 1.0f / tanHalfFov.y,
+		m02: offset.x,
+		m11: 1.0f / (isFlipped ? -tanHalfFov.y : tanHalfFov.y),
+		m12: isFlipped ? -offset.y : offset.y,
 		m22: near / (near - far),
-		m23: far * near / (far - near),
+		m23: near * far / (far - near),
 		m32: 1.0f,
 		m33: 0
 	);
