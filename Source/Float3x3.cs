@@ -1,7 +1,7 @@
-﻿namespace Unmath
-{
-	using static Float3;
+﻿using static Unmath.Float3;
 
+namespace Unmath
+{
 	public struct Float3x3
 	{
 		public Float3 column0, column1, column2;
