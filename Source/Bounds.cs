@@ -1,4 +1,4 @@
-using UnityEngine;
+using static Unmath.Float3;
 
 namespace Unmath
 {
@@ -12,64 +12,52 @@ namespace Unmath
 			this.extents = extents;
 		}
 
-		public static implicit operator Bounds(UnityEngine.Bounds bounds)
-		{
-			return new Bounds(bounds.center, bounds.extents);
-		}
+		public static implicit operator Bounds(UnityEngine.Bounds bounds) => new(bounds.center, bounds.extents);
 
 		public static implicit operator UnityEngine.Bounds(Bounds bounds) => new(bounds.center, bounds.extents);
 
 		public static Bounds MinMax(Float3 min, Float3 max) => new(0.5f * (max + min), 0.5f * (max - min));
 
-		public Float3 Min
-		{
-			readonly get
-			{
-				return center - extents;
-			}
-			set
-			{
-				var max = Max;
-				center = 0.5f * (max + value);
-				extents = 0.5f * (max - value);
-			}
-		}
+		public Float3 Min { readonly get => center - extents; set => (center, extents) = (0.5f * (Max + value), 0.5f * (Max - value)); }
 
-		public Float3 Max
-		{
-			get
-			{
-				return center + extents;
-			}
-			set
-			{
-				var min = Min;
-				center = 0.5f * (value + min);
-				extents = 0.5f * (value - min);
-			}
-		}
+		public Float3 Max { readonly get => center + extents; set => (center, extents) = (0.5f * (value + Min), 0.5f * (value - Min)); }
 
 		public readonly Float3 Size => 2.0f * extents;
 
-		public Bounds Encapsulate(Float3 point)
+		public readonly Bounds Encapsulate(Float3 point)
 		{
-			return MinMax(Float3.Min(Min, point), Float3.Max(Max, point));
+			return MinMax(Min(Min, point), Max(Max, point));
 		}
 
-		public Bounds Encapsulate(Bounds bounds)
+		public readonly Bounds Encapsulate(Bounds bounds)
 		{
 			var result = Encapsulate(bounds.center - bounds.extents);
 			return result.Encapsulate(bounds.center + bounds.extents);
 		}
 
 		/// <summary> Shrinks a bounds to the minimum of it and another bounds </summary>
-		public Bounds Shrink(Bounds bounds)
+		public readonly Bounds Shrink(Bounds bounds)
 		{
-			return MinMax(Float3.Max(Min, bounds.Min), Float3.Min(Max, bounds.Max));
+			return MinMax(Max(Min, bounds.Min), Min(Max, bounds.Max));
+		}
+
+		public readonly Float3 GetCorner(int i)
+		{
+			return i switch
+			{
+				0 => new(Min.x, Min.y, Min.z),
+				1 => new(Min.x, Min.y, Max.z),
+				2 => new(Min.x, Max.y, Min.z),
+				3 => new(Min.x, Max.y, Max.z),
+				4 => new(Max.x, Min.y, Min.z),
+				5 => new(Max.x, Min.y, Max.z),
+				6 => new(Max.x, Max.y, Min.z),
+				_ => new(Max.x, Max.y, Max.z),
+			};
 		}
 
 		/// <summary> Intersects a ray against this bounding box and returns whether it hits, and the distance to the first and second hit </summary>
-		public bool IntersectRay(Ray3D ray, out float t0, out float t1)
+		public readonly bool IntersectRay(Ray3D ray, out float t0, out float t1)
 		{
 			var invdir = ray.direction.Rcp;
 
@@ -113,42 +101,29 @@ namespace Unmath
 		}
 
 		/// <summary> Transforms the corners of this bounds by a matrix </summary>
-		public readonly Bounds Transform(Matrix4x4 matrix)
+		public readonly Bounds Transform(Float4x4 matrix)
 		{
 			Float3 min = default, max = default;
-			for (int z = 0, k = 0; z < 2; z++, k++)
+			for(var i = 0; i < 8; i++)
 			{
-				for (var y = 0; y < 2; y++, k++)
-				{
-					for (var x = 0; x < 2; x++, k++)
-					{
-						var point = Min + Size * new Float3(x, y, z);
-						var transformedPoint = (Float4)(matrix * new Float4(point.x, point.y, point.z, 1));
-						var projectedPoint = transformedPoint.xyz / transformedPoint.w;
-						min = k == 0 ? projectedPoint : Float3.Min(min, projectedPoint);
-						max = k == 0 ? projectedPoint : Float3.Max(max, projectedPoint);
-					}
-				}
+				var point = GetCorner(i);
+				var projectedPoint = matrix.MultiplyPointProj(point);
+				min = i == 0 ? projectedPoint : Min(min, projectedPoint);
+				max = i == 0 ? projectedPoint : Max(max, projectedPoint);
 			}
 
 			return MinMax(min, max);
 		}
 
-		public readonly Bounds Transform3x4(Matrix4x4 matrix)
+		public readonly Bounds Transform3x4(Float4x4 matrix)
 		{
 			Float3 min = default, max = default;
-			for (int z = 0, k = 0; z < 2; z++, k++)
+			for (var i = 0; i < 8; i++)
 			{
-				for (var y = 0; y < 2; y++, k++)
-				{
-					for (var x = 0; x < 2; x++, k++)
-					{
-						var point = Min + Size * new Float3(x, y, z);
-						var viewPoint = matrix.MultiplyPoint3x4(point);
-						min = k == 0 ? viewPoint : Float3.Min(min, viewPoint);
-						max = k == 0 ? viewPoint : Float3.Max(max, viewPoint);
-					}
-				}
+				var point = GetCorner(i);
+				var projectedPoint = matrix.MultiplyPoint3x4(point);
+				min = i == 0 ? projectedPoint : Min(min, projectedPoint);
+				max = i == 0 ? projectedPoint : Max(max, projectedPoint);
 			}
 
 			return MinMax(min, max);
