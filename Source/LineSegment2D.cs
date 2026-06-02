@@ -1,64 +1,66 @@
-﻿public struct LineSegment2D
+﻿namespace Unmath
 {
-	public Float2 a, b;
-
-	public LineSegment2D(Float2 a, Float2 b)
+	public struct LineSegment2D
 	{
-		this.a = a;
-		this.b = b;
-	}
+		public Float2 a, b;
 
-	public float Magnitude => Float2.Distance(a, b);
+		public LineSegment2D(Float2 a, Float2 b)
+		{
+			this.a = a;
+			this.b = b;
+		}
 
-	public bool DistanceToPoint(Float2 p, out float distance)
-	{
-		var delta = b - a;
-		var segmentLengthSquared = delta.SquareMagnitude;
-		var t = (p - a).Dot(delta) / segmentLengthSquared;
+		public float Magnitude => Float2.Distance(a, b);
 
-		// Convert segmet to A B C coefficients and calculate distance
-		var A = b.y - a.y;
-		var B = a.x - b.x;
-		var C = Float2.Cross(b - a, a);
+		public bool DistanceToPoint(Float2 p, out float distance)
+		{
+			var delta = b - a;
+			var segmentLengthSquared = delta.SquareMagnitude;
+			var t = (p - a).Dot(delta) / segmentLengthSquared;
 
-		distance = (A * p.x + B * p.y + C) * (new Float2(A, B)).RcpMagnitude;
+			// Convert segmet to A B C coefficients and calculate distance
+			var A = b.y - a.y;
+			var B = a.x - b.x;
+			var C = Float2.Cross(b - a, a);
 
-		return t >= 0.0f && t <= 1.0f;
-	}
+			distance = (A * p.x + B * p.y + C) * (new Float2(A, B)).RcpMagnitude;
 
-	public bool DistanceAlongRay(Ray2D ray, out float distance)
-	{
-		distance = new Line2D(a, b).DistanceAlongRay(ray);
-		var point = distance * ray.direction + ray.origin;
-		var delta = b - a;
-		var segmentLengthSquared = delta.SquareMagnitude;
-		var t = (point - a).Dot(delta) / segmentLengthSquared;
-		return t >= 0.0f && t <= 1.0f;
-	}
+			return t >= 0.0f && t <= 1.0f;
+		}
 
-	public bool IntersectRay(Ray2D ray, out Float2 point)
-	{
-		point = new Line2D(a, b).IntersectRay(ray);
-		var delta = b - a;
-		var segmentLengthSquared = delta.SquareMagnitude;
-		var t = (point - a).Dot(delta) / segmentLengthSquared;
-		return t >= 0.0f && t <= 1.0f;
-	}
+		public bool DistanceAlongRay(Ray2D ray, out float distance)
+		{
+			distance = new Line2D(a, b).DistanceAlongRay(ray);
+			var point = distance * ray.direction + ray.origin;
+			var delta = b - a;
+			var segmentLengthSquared = delta.SquareMagnitude;
+			var t = (point - a).Dot(delta) / segmentLengthSquared;
+			return t >= 0.0f && t <= 1.0f;
+		}
 
-	public bool IntersectLine(Line2D line, out Float2 point)
-	{
-		// Represent the segment as a line (Ax + By + C = 0)
-		var segmentLine = new Line2D(a, b);
+		public bool IntersectRay(Ray2D ray, out Float2 point)
+		{
+			point = new Line2D(a, b).IntersectRay(ray);
+			var delta = b - a;
+			var segmentLengthSquared = delta.SquareMagnitude;
+			var t = (point - a).Dot(delta) / segmentLengthSquared;
+			return t >= 0.0f && t <= 1.0f;
+		}
 
-		// Find intersection between the two lines
-		point = segmentLine.IntersectLine(line);
+		public bool IntersectLine(Line2D line, out Float2 point)
+		{
+			// Represent the segment as a line (Ax + By + C = 0)
+			var segmentLine = new Line2D(a, b);
 
-		// Check if the intersection point lies within the segment bounds
-		var delta = b - a;
-		var segmentLengthSquared = delta.SquareMagnitude;
-		var t = (point - a).Dot(delta) / segmentLengthSquared;
+			// Find intersection between the two lines
+			point = segmentLine.IntersectLine(line);
 
-		return t >= 0.0f && t <= 1.0f;
+			// Check if the intersection point lies within the segment bounds
+			var delta = b - a;
+			var segmentLengthSquared = delta.SquareMagnitude;
+			var t = (point - a).Dot(delta) / segmentLengthSquared;
+
+			return t >= 0.0f && t <= 1.0f;
+		}
 	}
 }
-

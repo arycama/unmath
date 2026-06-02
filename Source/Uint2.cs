@@ -1,13 +1,16 @@
 ﻿using System;
 
-[Serializable]
-public struct Uint2
+namespace Unmath
 {
-	public uint x, y;
-
-	public Uint2(uint x, uint y)
+	[Serializable]
+	public struct Uint2
 	{
-		this.x = x;
-		this.y = y;
+		public uint x, y;
+
+		public Uint2(uint x, uint y)
+		{
+			this.x = x;
+			this.y = y;
+		}
 	}
 }

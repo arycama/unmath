@@ -1,10 +1,13 @@
-﻿public enum FrustumPlane
+﻿namespace Unmath
 {
-	Left,
-	Right,
-	Down,
-	Up,
-	Near,
-	Far,
-	Count
+	public enum FrustumPlane
+	{
+		Left,
+		Right,
+		Down,
+		Up,
+		Near,
+		Far,
+		Count
+	}
 }

@@ -1,22 +1,25 @@
 ﻿using System;
 
-[Serializable]
-public struct Int2
+namespace Unmath
 {
-	public int x, y;
-
-	public Int2(int x, int y)
+	[Serializable]
+	public struct Int2
 	{
-		this.x = x;
-		this.y = y;
+		public int x, y;
+
+		public Int2(int x, int y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+
+		public override string ToString() => $"({x}, {y})";
+
+		public static explicit operator Float2(Int2 a) => new(a.x, a.y);
+
+		public static implicit operator Int2(int a) => new(a, a);
+
+		public static bool operator ==(Int2 a, Int2 b) => a.x == b.x && a.y == b.y;
+		public static bool operator !=(Int2 a, Int2 b) => a.x != b.x || a.y != b.y;
 	}
-
-	public override string ToString() => $"({x}, {y})";
-
-	public static explicit operator Float2(Int2 a) => new(a.x, a.y);
-
-	public static implicit operator Int2(int a) => new(a, a);
-
-	public static bool operator == (Int2 a, Int2 b) => a.x == b.x && a.y == b.y;
-	public static bool operator != (Int2 a, Int2 b) => a.x != b.x || a.y != b.y;
 }

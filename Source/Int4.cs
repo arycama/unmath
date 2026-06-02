@@ -1,15 +1,18 @@
 ﻿using System;
 
-[Serializable]
-public struct Int4
+namespace Unmath
 {
-	public int x, y, z, w;
-
-	public Int4(int x, int y, int z, int w)
+	[Serializable]
+	public struct Int4
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.w = w;
+		public int x, y, z, w;
+
+		public Int4(int x, int y, int z, int w)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.w = w;
+		}
 	}
 }

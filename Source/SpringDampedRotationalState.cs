@@ -1,6 +1,7 @@
-﻿public struct SpringDampedRotationalState
+﻿namespace Unmath
 {
-	public RotationSpring rotationalState;
-
-
+	public struct SpringDampedRotationalState
+	{
+		public RotationSpring rotationalState;
+	}
 }

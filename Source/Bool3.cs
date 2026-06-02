@@ -1,11 +1,14 @@
-﻿public struct Bool3
+﻿namespace Unmath
 {
-    public bool x, y, z;
-
-    public Bool3(bool x, bool y, bool z)
+    public struct Bool3
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        public bool x, y, z;
+
+        public Bool3(bool x, bool y, bool z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 }

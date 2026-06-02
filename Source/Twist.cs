@@ -1,30 +1,32 @@
 ﻿using System;
-using Unity.Profiling;
 
-[Serializable]
-public struct Twist
+namespace Unmath
 {
-	public Float3 linearVelocity, angularVelocity;
-
-	public Twist(Float3 linearVelocity, Float3 angularVelocity)
+	[Serializable]
+	public struct Twist
 	{
-		this.linearVelocity = linearVelocity;
-		this.angularVelocity = angularVelocity;
-	}
+		public Float3 linearVelocity, angularVelocity;
 
-	public Twist AddForce(Float3 force) => new(linearVelocity + force, angularVelocity);
+		public Twist(Float3 linearVelocity, Float3 angularVelocity)
+		{
+			this.linearVelocity = linearVelocity;
+			this.angularVelocity = angularVelocity;
+		}
 
-	public Twist AddTorque(Float3 torque) => new(linearVelocity, angularVelocity + torque);
+		public Twist AddForce(Float3 force) => new(linearVelocity + force, angularVelocity);
 
-	public Twist AddTwist(Twist twist)
-	{
-		var result = AddForce(twist.linearVelocity);
-		return result.AddTorque(twist.angularVelocity);
-	}
+		public Twist AddTorque(Float3 torque) => new(linearVelocity, angularVelocity + torque);
 
-	public Twist AddForceAtPoint(Float3 force, Float3 point, Float3 centerOfMass)
-	{
-		var result = AddForce(force);
-		return result.AddTorque((point - centerOfMass).Cross(force));
+		public Twist AddTwist(Twist twist)
+		{
+			var result = AddForce(twist.linearVelocity);
+			return result.AddTorque(twist.angularVelocity);
+		}
+
+		public Twist AddForceAtPoint(Float3 force, Float3 point, Float3 centerOfMass)
+		{
+			var result = AddForce(force);
+			return result.AddTorque((point - centerOfMass).Cross(force));
+		}
 	}
 }

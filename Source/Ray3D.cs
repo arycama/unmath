@@ -1,10 +1,13 @@
-﻿public struct Ray3D
+﻿namespace Unmath
 {
-	public Float3 origin, direction;
-
-	public Ray3D(Float3 origin, Float3 direction)
+	public struct Ray3D
 	{
-		this.origin = origin;
-		this.direction = direction;
+		public Float3 origin, direction;
+
+		public Ray3D(Float3 origin, Float3 direction)
+		{
+			this.origin = origin;
+			this.direction = direction;
+		}
 	}
 }

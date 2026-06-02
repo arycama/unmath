@@ -1,14 +1,17 @@
 ﻿using System;
 
-[Serializable]
-public struct Uint3
+namespace Unmath
 {
-	public uint x, y, z;
-
-	public Uint3(uint x, uint y, uint z)
+	[Serializable]
+	public struct Uint3
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		public uint x, y, z;
+
+		public Uint3(uint x, uint y, uint z)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
 	}
 }

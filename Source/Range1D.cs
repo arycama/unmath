@@ -1,34 +1,37 @@
 using System;
-using static Math;
+using static Unmath.Math;
 
-[Serializable]
-public struct FloatRange
+namespace Unmath
 {
-    public float min, max;
-
-	public FloatRange(float min = float.PositiveInfinity, float max = float.NegativeInfinity)
+	[Serializable]
+	public struct FloatRange
 	{
-		this.min = min;
-		this.max = max;
-	}
+		public float min, max;
 
-	public float Size => max - min;
+		public FloatRange(float min = float.PositiveInfinity, float max = float.NegativeInfinity)
+		{
+			this.min = min;
+			this.max = max;
+		}
 
-	public float Clamp(float value) => Math.Clamp(value, min, max);
+		public float Size => max - min;
 
-	public float Lerp(float t) => Math.Lerp(min, max, t);
+		public float Clamp(float value) => Math.Clamp(value, min, max);
 
-	public float Random() => Math.Lerp(min, max, UnityEngine.Random.value);
+		public float Lerp(float t) => Math.Lerp(min, max, t);
 
-	public void Encapsulate(float value)
-	{
-		min = Min(min, value);
-		max = Max(max, value);
-	}
+		public float Random() => Math.Lerp(min, max, UnityEngine.Random.value);
 
-	public void Shrink(float value)
-	{
-		min = Max(min, value);
-		max = Min(max, value);
+		public void Encapsulate(float value)
+		{
+			min = Min(min, value);
+			max = Max(max, value);
+		}
+
+		public void Shrink(float value)
+		{
+			min = Max(min, value);
+			max = Min(max, value);
+		}
 	}
 }
