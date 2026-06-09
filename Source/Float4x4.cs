@@ -211,7 +211,7 @@ namespace Unmath
 			c0 * b.m03 + c1 * b.m13 + c2 * b.m23 + c3 * b.m33
 		);
 
-		public readonly Float4 GetFrustumPlane(FrustumPlane plane)
+		public readonly Plane GetFrustumPlane(FrustumPlane plane)
 		{
 			var result = plane switch
 			{
