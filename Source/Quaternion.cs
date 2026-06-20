@@ -318,9 +318,9 @@ namespace Unmath
 		public readonly Float3 InverseRotate(Float3 a) => Inverse.Rotate(a);
 
 		/// <summary> Calculates the future rotation of a quaternion with an angular velocity in radians </summary>
-		public static Quaternion IntegrateVelocity(Quaternion current, Float3 velocity)
+		public static Quaternion IntegrateVelocity(Quaternion current, Float3 velocity, float deltaTime)
 		{
-			return Normalize(current.Rotate(new Quaternion(0.5f * Time.deltaTime * velocity, 1)));
+			return Normalize(current.Rotate(new Quaternion(0.5f * deltaTime * velocity, 1)));
 
 			var w = velocity.SquareMagnitude;
 
@@ -334,6 +334,11 @@ namespace Unmath
 			var pqr = velocity * s;
 			var quatVel = new Quaternion(pqr, 0);
 			return Normalize(quatVel.Rotate(current) + current * q);
+		}
+
+		public static Quaternion IntegrateVelocity(Quaternion current, Float3 velocity)
+		{
+			return IntegrateVelocity(current, velocity, Time.deltaTime);
 		}
 
 		/// <summary> Calculates a quaternion with the specified forward and up directions </summary>
