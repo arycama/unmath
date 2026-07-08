@@ -116,10 +116,12 @@ namespace Unmath
 
 		public static Float4x4 Ortho(Bounds bounds) => Ortho(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
 
-		public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far) => new
+		public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far, bool isFlipped = false) => new
 		(
-			m00: 2 / (right - left), m03: (right + left) / (left - right),
-			m11: 2 / (top - bottom), m13: (top + bottom) / (bottom - top),
+			m00: 2.0f / (right - left), 
+			m03: (right + left) / (left - right),
+			m11: 2.0f / (isFlipped ? bottom - top : top - bottom), 
+			m13: (top + bottom) / (isFlipped ? top - bottom : bottom - top),
 			m22: Rcp(near - far), m23: far / (far - near)
 		);
 
