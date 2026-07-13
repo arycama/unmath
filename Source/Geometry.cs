@@ -78,6 +78,12 @@ namespace Unmath
 
 		public static float TanHalfFovDegrees(float fov) => TanHalfFov(Radians(fov));
 
+		public static float ConeCosHalfAngleToSolidAngle(float cosAngle) => -TwoPi * cosAngle + TwoPi;
+
+		public static float ConeAngleToSolidAngle(float angle) => ConeCosAngleToSolidAngle(Cos(0.5f * angle));
+
+		public static float ConeAngleToSolidAngleDegrees(float angle) => ConeAngleToSolidAngle(Radians(angle));
+
 		public static Float3 GetFrustumCorner(Float2 tanHalfFov, float near, float far, FrustumCorner frustumCorner)
 		{
 			var nearWidth = 2 * near * tanHalfFov.x;
