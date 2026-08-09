@@ -26,5 +26,7 @@ namespace Unmath
 		public readonly float Distance(Float3 point) => normal.Dot(point) + distance;
 
 		public readonly Float3 ClosestPoint(Float3 point) => -Distance(point) * normal + point;
+
+		public readonly float Dot(Float4 point) => normal.Dot(point.xyz) + distance * point.w;
 	}
 }
