@@ -63,6 +63,7 @@ namespace Unmath
 		public static implicit operator Float3(Vector3 a) => new(a.x, a.y, a.z);
 
 		public static implicit operator Vector3(Float3 a) => new(a.x, a.y, a.z);
+		public static implicit operator Vector4(Float3 a) => new(a.x, a.y, a.z, 0);
 
 		public static explicit operator Float3(Vector4 a) => new(a.x, a.y, a.z);
 
