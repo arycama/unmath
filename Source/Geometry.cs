@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using static Unmath.Math;
 
@@ -86,24 +85,10 @@ namespace Unmath
 
 		public static Float3 GetFrustumCorner(Float2 tanHalfFov, float near, float far, FrustumCorner frustumCorner)
 		{
-			var nearWidth = 2 * near * tanHalfFov.x;
-			var nearHeight = 2 * near * tanHalfFov.y;
-			var farWidth = 2 * far * tanHalfFov.x;
-			var farHeight = 2 * far * tanHalfFov.y;
-
-			var index = (int)frustumCorner;
-			return index switch
-			{
-				0 => new(-nearWidth / 2, -nearHeight / 2, near),// Bottom left
-				1 => new(-nearWidth / 2, nearHeight / 2, near),// Top left
-				2 => new(nearWidth / 2, nearHeight / 2, near),// Top right
-				3 => new(nearWidth / 2, -nearHeight / 2, near),// Bottom-right
-				4 => new(-farWidth / 2, -farHeight / 2, far),// Bottom left
-				5 => new(-farWidth / 2, farHeight / 2, far),// Top left
-				6 => new(farWidth / 2, farHeight / 2, far),// Top right
-				7 => new(farWidth / 2, -farHeight / 2, far),// Bottom right
-				_ => throw new ArgumentOutOfRangeException(index.ToString()),
-			};
+			var i = (int)frustumCorner;
+			var x = (i & 1) << 1;
+			var y = ((i >> 1) & 1) << 1;
+			return new Float3((1.0f - new Float2(x, y)) * tanHalfFov, 1.0f) * ((i & 4) == 0 ? near : far);
 		}
 
 		public static Bounds GetFrustumBounds(Float2 tanHalfFov, float near, float far, Float4x4 matrix)
