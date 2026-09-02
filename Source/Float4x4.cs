@@ -9,23 +9,33 @@ namespace Unmath
 	{
 		public static readonly Float3[] lookAtList =
 		{
-		new(1.0f, 0.0f, 0.0f),
-		new(-1.0f, 0.0f, 0.0f),
-		new(0.0f, 1.0f, 0.0f),
-		new(0.0f, -1.0f, 0.0f),
-		new(0.0f, 0.0f, 1.0f),
-		new(0.0f, 0.0f, -1.0f),
-	};
+			new(1.0f, 0.0f, 0.0f),
+			new(-1.0f, 0.0f, 0.0f),
+			new(0.0f, 1.0f, 0.0f),
+			new(0.0f, -1.0f, 0.0f),
+			new(0.0f, 0.0f, 1.0f),
+			new(0.0f, 0.0f, -1.0f),
+		};
 
 		public static readonly Float3[] upVectorList =
 		{
-		new(0.0f, 1.0f, 0.0f),
-		new(0.0f, 1.0f, 0.0f),
-		new(0.0f, 0.0f, -1.0f),
-		new(0.0f, 0.0f, 1.0f),
-		new(0.0f, 1.0f, 0.0f),
-		new(0.0f, 1.0f, 0.0f),
-	};
+			new(0.0f, 1.0f, 0.0f),
+			new(0.0f, 1.0f, 0.0f),
+			new(0.0f, 0.0f, -1.0f),
+			new(0.0f, 0.0f, 1.0f),
+			new(0.0f, 1.0f, 0.0f),
+			new(0.0f, 1.0f, 0.0f),
+		};
+
+		public static readonly Float3x3[] cubemapRotations =
+		{
+			new(Float3.Back, Float3.Up, Float3.Right),
+			new(Float3.Forward, Float3.Up, Float3.Left),
+			new(Float3.Right, Float3.Back, Float3.Up),
+			new(Float3.Right, Float3.Forward, Float3.Down),
+			new(Float3.Right, Float3.Up, Float3.Forward),
+			new(Float3.Left, Float3.Up, Float3.Back)
+		};
 
 		public Float4 c0, c1, c2, c3;
 
@@ -69,6 +79,9 @@ namespace Unmath
 		public readonly Float3 Right => c0.xyz;
 		public readonly Float3 Up => c1.xyz;
 		public readonly Float3 Forward => c2.xyz;
+		public readonly Float3 Left => -c0.xyz;
+		public readonly Float3 Down => -c1.xyz;
+		public readonly Float3 Back => -c2.xyz;
 
 		public readonly Quaternion Rotation => new(Right, Up, Forward);
 		public readonly Float3 Translation => c3.xyz;
@@ -118,9 +131,9 @@ namespace Unmath
 
 		public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far, bool isFlipped = false) => new
 		(
-			m00: 2.0f / (right - left), 
+			m00: 2.0f / (right - left),
 			m03: (right + left) / (left - right),
-			m11: 2.0f / (isFlipped ? bottom - top : top - bottom), 
+			m11: 2.0f / (isFlipped ? bottom - top : top - bottom),
 			m13: (top + bottom) / (isFlipped ? top - bottom : bottom - top),
 			m22: Rcp(near - far), m23: far / (far - near)
 		);
