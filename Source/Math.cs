@@ -8,7 +8,6 @@ namespace Unmath
 	{
 		public const float E = MathF.E;
 		public const float Log2e = (float)1.44269504088896340736;
-
 		public const float Pi = MathF.PI;
 		public const float Tau = Pi * 2;
 		public const float TwoPi = Tau;
@@ -23,6 +22,7 @@ namespace Unmath
 		public static float Degrees(float x) => 180 / Pi * x;
 
 		// Simple math utils
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Sign(float x) => x < 0 ? -1 : 1;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -85,7 +85,6 @@ namespace Unmath
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Snap(float value, float cellSize) => Floor(value / cellSize) * cellSize;
 
-
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float DeltaAngle(float current, float target)
 		{
@@ -98,6 +97,26 @@ namespace Unmath
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float SignFlip(float x, float sign) => Flip(x, sign < 0);
+
+		public static int NextPowerOfTwo(int x)
+		{
+			x--;
+			x |= x >> 16;
+			x |= x >> 8;
+			x |= x >> 4;
+			x |= x >> 2;
+			return (x | (x >> 1)) + 1;
+		}
+
+		public static int ClosestPowerOfTwo(int x)
+		{
+			var y = NextPowerOfTwo(x);
+			var z = y >> 1;
+			return x - z < y - x ? z : y;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsPowerOfTwo(int x) => (x & (x - 1)) == 0;
 
 		// Trig/inv trig
 
@@ -130,58 +149,33 @@ namespace Unmath
 		public static float Atan2(float y, float x) => MathF.Atan2(y, x);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float SinFromCos(float x) => Sqrt(1 - Square(x));
+		public static float SinFromCos(float x) => Sqrt(1.0f - Square(x));
 
-		// Computes sin(thetaA + thetaB)
-		public static float SineAddition(float cosA, float sinA, float cosB, float sinB)
-		{
-			return sinA * cosB + cosA * sinB;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float SineAddition(float cosA, float sinA, float cosB, float sinB) => sinA * cosB + cosA * sinB;
 
-		// Computes sin(thetaA + thetaB)
-		public static float SineAddition(float cosA, float cosB)
-		{
-			return SineAddition(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float SineAddition(float cosA, float cosB) => SineAddition(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
 
-		// Computes sin(thetaA - thetaB)
-		public static float SineDifference(float cosA, float sinA, float cosB, float sinB)
-		{
-			return sinA * cosB - cosA * sinB;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float SineDifference(float cosA, float sinA, float cosB, float sinB) => sinA * cosB - cosA * sinB;
 
-		// Computes sin(thetaA - thetaB)
-		public static float SineDifference(float cosA, float cosB)
-		{
-			return SineDifference(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float SineDifference(float cosA, float cosB) => SineDifference(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
 
-		// Computes cos(thetaA + thetaB)
-		public static float CosineAddition(float cosA, float sinA, float cosB, float sinB)
-		{
-			return cosA * cosB - sinA * sinB;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float CosineAddition(float cosA, float sinA, float cosB, float sinB) => cosA * cosB - sinA * sinB;
 
-		// Computes cos(thetaA + thetaB)
-		public static float CosineAddition(float cosA, float cosB)
-		{
-			return CosineAddition(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float CosineAddition(float cosA, float cosB) => CosineAddition(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
 
-		// Computes cos(thetaA - thetaB)
-		public static float CosineDifference(float cosA, float sinA, float cosB, float sinB)
-		{
-			return cosA * cosB + sinA * sinB;
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float CosineDifference(float cosA, float sinA, float cosB, float sinB) => cosA * cosB + sinA * sinB;
 
-		// Computes cos(thetaA - thetaB)
-		public static float CosineDifference(float cosA, float cosB)
-		{
-			return CosineDifference(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
-		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float CosineDifference(float cosA, float cosB) => CosineDifference(cosA, SinFromCos(cosA), cosB, SinFromCos(cosB));
 
 		// Transcendental etc
-
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Rcp(float x) => 1.0f / x;
 
@@ -278,7 +272,7 @@ namespace Unmath
 
 		public static float MoveTowardsAngle(float a, float b, float speed)
 		{
-			float num = DeltaAngle(a, b);
+			var num = DeltaAngle(a, b);
 			if (0f - speed < num && num < speed)
 			{
 				return b;
@@ -348,64 +342,34 @@ namespace Unmath
 		public static float ConeCosAngleToSolidAngle(float coneCosAngle) => TwoPi * (1 - coneCosAngle);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int BitPack(int data, int size, int offset)
-		{
-			return (data & ((1 << size) - 1)) << offset;
-		}
+		public static int BitPack(int data, int size, int offset) => (data & ((1 << size) - 1)) << offset;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static int BitUnpack(int data, int size, int offset)
-		{
-			return (data >> offset) & ((1 << size) - 1);
-		}
+		public static int BitUnpack(int data, int size, int offset) => (data >> offset) & ((1 << size) - 1);
 
 		// Unit conversions (TODO: Put in seperate Include?)
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float CentimeterToMeter(float a)
-		{
-			return a / 100;
-		}
+		public static float CentimeterToMeter(float a) => a / 100;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float MillimeterToCentimeter(float a)
-		{
-			return a / 10;
-		}
+		public static float MillimeterToCentimeter(float a) => a / 10;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float MillimeterToMeter(float a)
-		{
-			return CentimeterToMeter(MillimeterToCentimeter(a));
-		}
+		public static float MillimeterToMeter(float a) => CentimeterToMeter(MillimeterToCentimeter(a));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float MicrometerToMillimeter(float a)
-		{
-			return a / 1000;
-		}
+		public static float MicrometerToMillimeter(float a) => a / 1000;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float MicrometerToMeter(float a)
-		{
-			return MillimeterToMeter(MicrometerToMillimeter(a));
-		}
+		public static float MicrometerToMeter(float a) => MillimeterToMeter(MicrometerToMillimeter(a));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float NanometerToMicrometer(float a)
-		{
-			return a / 1000;
-		}
+		public static float NanometerToMicrometer(float a) => a / 1000;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float NanometerToMeter(float a)
-		{
-			return MicrometerToMeter(NanometerToMicrometer(a));
-		}
+		public static float NanometerToMeter(float a) => MicrometerToMeter(NanometerToMicrometer(a));
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float GramToKilogram(float a)
-		{
-			return a / 1000;
-		}
+		public static float GramToKilogram(float a) => a / 1000;
 	}
 }
