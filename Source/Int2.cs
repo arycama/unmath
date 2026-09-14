@@ -21,5 +21,10 @@ namespace Unmath
 
 		public static bool operator ==(Int2 a, Int2 b) => a.x == b.x && a.y == b.y;
 		public static bool operator !=(Int2 a, Int2 b) => a.x != b.x || a.y != b.y;
+
+		public static Int2 operator +(Int2 a, Int2 b) => new(a.x + b.x, a.y + b.y);
+		public static Int2 operator -(Int2 a, Int2 b) => new(a.x - b.x, a.y - b.y);
+		public static Int2 operator *(Int2 a, Int2 b) => new(a.x * b.x, a.y * b.y);
+		public static Int2 operator /(Int2 a, Int2 b) => new(a.x / b.x, a.y / b.y);
 	}
 }

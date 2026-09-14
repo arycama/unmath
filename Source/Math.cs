@@ -312,6 +312,11 @@ namespace Unmath
 			return SpringDamp(current, target, ref velocity, sqrtStiffness, overshoot);
 		}
 
+		public static int DivRoundUp(int x, int y) => (x + y - 1) / y;
+		public static Int2 DivRoundUp(Int2 x, Int2 y) => (x + y - 1) / y;
+
+		public static uint DivRoundUp(uint x, uint y) => (x + y - 1u) / y;
+
 		// Todo: Move to appropriate classes
 		public static Float2 Mul(Float2x2 m, Float2 p)
 		{
