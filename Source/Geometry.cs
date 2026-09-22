@@ -74,8 +74,10 @@ namespace Unmath
 		}
 
 		public static float TanHalfFov(float fov) => Tan(0.5f * fov);
+		public static Float2 TanHalfFov(float fov, float aspect) => TanHalfFov(fov) * new Float2(aspect, 1.0f);
 
 		public static float TanHalfFovDegrees(float fov) => TanHalfFov(Radians(fov));
+		public static Float2 TanHalfFovDegrees(float fov, float aspect) => TanHalfFov(Radians(fov), aspect);
 
 		public static float ConeCosHalfAngleToSolidAngle(float cosAngle) => -TwoPi * cosAngle + TwoPi;
 
