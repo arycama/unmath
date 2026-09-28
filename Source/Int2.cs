@@ -3,7 +3,7 @@
 namespace Unmath
 {
 	[Serializable]
-	public struct Int2
+	public struct Int2 : IEquatable<Int2>
 	{
 		public int x, y;
 
@@ -13,7 +13,13 @@ namespace Unmath
 			this.y = y;
 		}
 
-		public override string ToString() => $"({x}, {y})";
+		public override readonly string ToString() => $"({x}, {y})";
+
+		public override readonly bool Equals(object obj) => obj is Int2 @int && Equals(@int);
+
+		public readonly bool Equals(Int2 other) => x == other.x && y == other.y;
+
+		public override readonly int GetHashCode() => HashCode.Combine(x, y);
 
 		public static explicit operator Float2(Int2 a) => new(a.x, a.y);
 

@@ -142,6 +142,12 @@ namespace Unmath
 
 		public override readonly string ToString() => $"({x}, {y}, {z})";
 
+		public override readonly bool Equals(object obj) => obj is Float3 @float && Equals(@float);
+
+		public readonly bool Equals(Float3 other) => x == other.x && y == other.y && z == other.z;
+
+		public override readonly int GetHashCode() => HashCode.Combine(x, y, z);
+
 		public readonly Float3 Cross(Float3 b) => yzx * b.zxy - zxy * b.yzx;
 		public readonly float Dot(Float3 b) => x * b.x + y * b.y + z * b.z;
 		public readonly float HorizontalAngle => Atan(-y / xz.Magnitude);
@@ -260,10 +266,6 @@ namespace Unmath
 
 		public static Float3 Max(Float3 a, Float3 b) => new(Math.Max(a.x, b.x), Math.Max(a.y, b.y), Math.Max(a.z, b.z));
 
-		public override bool Equals(object obj) => obj is Float3 @float && Equals(@float);
-		public bool Equals(Float3 other) => x == other.x && y == other.y && z == other.z;
-		public override int GetHashCode() => HashCode.Combine(x, y, z);
-
 		public readonly void Deconstruct(out float x, out float y, out float z)
 		{
 			x = this.x; y = this.y; z = this.z;
@@ -274,8 +276,8 @@ namespace Unmath
 		public static float InverseLerp(Float3 a, Float3 b, Float3 value)
 		{
 			// Calculate the direction vector from a to b
-			Float3 ab = b - a;
-			Float3 av = value - a;
+			var ab = b - a;
+			var av = value - a;
 
 			// Project av onto ab and get the magnitude ratio
 			// This gives the percentage along the line from a to b

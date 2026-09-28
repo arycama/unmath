@@ -3,7 +3,7 @@
 namespace Unmath
 {
 	[Serializable]
-	public struct Int3
+	public struct Int3 : IEquatable<Int3>
 	{
 		public int x, y, z;
 
@@ -25,5 +25,11 @@ namespace Unmath
 		public static bool operator !=(Int3 left, Int3 right) => left.x != right.x || left.y != right.y || left.z != right.z;
 
 		public readonly override string ToString() => $"({x}, {y}, {z})";
+
+		public override readonly bool Equals(object obj) => obj is Int3 @int && Equals(@int);
+
+		public readonly bool Equals(Int3 other) => x == other.x && y == other.y && z == other.z;
+
+		public override readonly int GetHashCode() => HashCode.Combine(x, y, z);
 	}
 }
