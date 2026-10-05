@@ -140,7 +140,7 @@ namespace Unmath
 		public static float Asin(float x) => MathF.Asin(x);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static float Acos(float x) => MathF.Acos(x);
+		public static float Acos(float x) => x == 1 ? 0 : x == -1 ? Pi : MathF.Acos(x);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float Atan(float x) => MathF.Atan(x);
