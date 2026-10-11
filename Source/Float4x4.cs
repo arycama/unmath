@@ -129,36 +129,39 @@ namespace Unmath
 
 		public static Float4x4 Ortho(Bounds bounds) => Ortho(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
 
-		public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far, bool isFlipped = false) => new
+		public static Float4x4 OrthoReverseZ(float left, float right, float bottom, float top, float near, float far) => new
 		(
 			m00: 2.0f / (right - left),
 			m03: (right + left) / (left - right),
-			m11: 2.0f / (isFlipped ? bottom - top : top - bottom),
-			m13: (top + bottom) / (isFlipped ? top - bottom : bottom - top),
-			m22: Rcp(near - far), m23: far / (far - near)
+			m11: 2.0f / (top - bottom),
+			m13: (top + bottom) / (bottom - top),
+			m22: Rcp(near - far),
+			m23: far / (far - near)
 		);
 
 		public static Float4x4 OrthoReverseZ(Bounds bounds) => OrthoReverseZ(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
 
 		public static Float4x4 OrthoReverseZSample(float left, float right, float bottom, float top, float near, float far) => new
 		(
-			m00: Rcp(right - left), m03: -left / (right - left),
-			m11: Rcp(bottom - top), m13: top / (top - bottom),
-			m22: Rcp(near - far), m23: far / (far - near)
-		);
-
-		// TODO: I think this is just an ortho matrix? Remove or refactor
-		public static Float4x4 OrthoOffCenterNormalized(float left, float right, float bottom, float top, float near, float far) => new
-		(
-			m00: 1.0f / (right - left),
+			m00: Rcp(right - left),
 			m03: left / (left - right),
-			m11: 1.0f / (top - bottom),
-			m13: bottom / (bottom - top),
-			m22: 1.0f / (far - near),
-			m23: near / (near - far)
+			m11: Rcp(bottom - top),
+			m13: top / (top - bottom),
+			m22: Rcp(near - far),
+			m23: far / (far - near)
 		);
 
 		public static Float4x4 OrthoReverseZSample(Bounds bounds) => OrthoReverseZSample(bounds.Min.x, bounds.Max.x, bounds.Min.y, bounds.Max.y, bounds.Min.z, bounds.Max.z);
+
+		public static Float4x4 OrthoReverseZSampleInverse(float left, float right, float bottom, float top, float near, float far) => new
+		(
+			m00: right - left,
+			m03: left,
+			m11: bottom - top,
+			m13: top,
+			m22: near - far,
+			m23: far
+		);
 
 		public static Float4x4 PerspectiveReverseZ(Float2 tanHalfFov, float near, float far, Float2 offset = default, bool isFlipped = false) => new
 		(

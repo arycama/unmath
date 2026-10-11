@@ -5,7 +5,7 @@ using static Unmath.Math;
 namespace Unmath
 {
 	[Serializable]
-	public struct Float2
+	public struct Float2 : IEquatable<Float2>
 	{
 		public float x, y;
 
@@ -123,5 +123,11 @@ namespace Unmath
 		public static Float2 Floor(Float2 a) => new(Math.Floor(a.x), Math.Floor(a.y));
 
 		public Float2 Clamp(Float2 min, Float2 max) => new(Math.Clamp(x, min.x, max.x), Math.Clamp(y, min.y, max.y));
+
+		public override readonly bool Equals(object obj) => obj is Float2 @float && Equals(@float);
+
+		public readonly bool Equals(Float2 other) => x == other.x && y == other.y;
+
+		public override readonly int GetHashCode() => HashCode.Combine(x, y);
 	}
 }

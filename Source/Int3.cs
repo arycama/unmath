@@ -20,6 +20,7 @@ namespace Unmath
 		public Int3(Int2 xy, int z) : this(xy.x, xy.y, z) { }
 
 		public static implicit operator Int3(int x) => new(x, x, x);
+		public static explicit operator Float3(Int3 x) => new(x.x, x.y, x.z);
 
 		public static bool operator ==(Int3 left, Int3 right) => left.x == right.x && left.y == right.y && left.z == right.z;
 		public static bool operator !=(Int3 left, Int3 right) => left.x != right.x || left.y != right.y || left.z != right.z;
