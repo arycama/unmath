@@ -25,6 +25,11 @@ namespace Unmath
 		public static bool operator ==(Int3 left, Int3 right) => left.x == right.x && left.y == right.y && left.z == right.z;
 		public static bool operator !=(Int3 left, Int3 right) => left.x != right.x || left.y != right.y || left.z != right.z;
 
+		public static Int3 operator +(Int3 a, Int3 b) => new(a.x + b.x, a.y + b.y, a.z + b.z);
+		public static Int3 operator -(Int3 a, Int3 b) => new(a.x - b.x, a.y - b.y, a.z - b.z);
+		public static Int3 operator *(Int3 a, Int3 b) => new(a.x * b.x, a.y * b.y, a.z * b.z);
+		public static Int3 operator /(Int3 a, Int3 b) => new(a.x / b.x, a.y / b.y, a.z / b.z);
+
 		public readonly override string ToString() => $"({x}, {y}, {z})";
 
 		public override readonly bool Equals(object obj) => obj is Int3 @int && Equals(@int);

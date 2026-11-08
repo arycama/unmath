@@ -314,6 +314,7 @@ namespace Unmath
 
 		public static int DivRoundUp(int x, int y) => (x + y - 1) / y;
 		public static Int2 DivRoundUp(Int2 x, Int2 y) => (x + y - 1) / y;
+		public static Int3 DivRoundUp(Int3 x, Int3 y) => (x + y - 1) / y;
 
 		public static uint DivRoundUp(uint x, uint y) => (x + y - 1u) / y;
 
