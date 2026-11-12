@@ -373,6 +373,8 @@ namespace Unmath
 		/// <summary> Rotates a quaternion by this quaternion </summary>
 		public readonly Quaternion Rotate(Quaternion a) => new(xyz * a.w + a.xyz * w + xyz.Cross(a.xyz), w * a.w - xyz.Dot(a.xyz));
 
+		public readonly RigidTransform Rotate(RigidTransform a) => new(Rotate(a.position), Rotate(a.rotation));
+
 		/// <summary> Rotates a point a around point b by this quaternion </summary>
 		public readonly Float3 RotateAround(Float3 a, Float3 b) => Rotate(a - b) + b;
 

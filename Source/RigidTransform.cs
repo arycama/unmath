@@ -38,13 +38,9 @@ namespace Unmath
 
 		public readonly RigidTransform Inverse => new(-rotation.InverseRotate(position), rotation.Inverse);
 
-		/// <summary> Applies a rotation to this rigid transform </summary>
-		public readonly RigidTransform Rotate(Quaternion rotation) => new(rotation.Rotate(position), rotation.Rotate(this.rotation));
-
 		public readonly RigidTransform Translate(Float3 translation) => new(position + translation, rotation);
 
-
-		public readonly RigidTransform Transform(RigidTransform a) => a.Rotate(rotation).Translate(position);
+		public readonly RigidTransform Transform(RigidTransform a) => rotation.Rotate(a).Translate(position);
 
 		public readonly RigidTransform Transform(Quaternion a) => Transform(new RigidTransform(Zero, a));
 
