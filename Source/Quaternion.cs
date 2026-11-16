@@ -18,6 +18,10 @@ namespace Unmath
 			this.w = w;
 		}
 
+		public Quaternion(Float4 q) : this(q.x, q.y, q.z, q.w)
+		{
+		}
+
 		/// <summary> Construct a Quaternion from Spherical Coordinates </summary>
 		public Quaternion(float theta, float phi)
 		{
@@ -300,17 +304,10 @@ namespace Unmath
 		public static Quaternion Euler(float x, float y, float z) => Euler(new(x, y, z));
 
 		/// <summary> Calculates a quaternion that rotates from a to b </summary>
-		public static Quaternion FromToRotation(Float3 a, Float3 b)
-		{
-			return FromToRotationNormalized(Float3.Normalize(a), Float3.Normalize(b));
-		}
+		public static Quaternion FromToRotation(Float3 a, Float3 b) => FromToRotationNormalized(Float3.Normalize(a), Float3.Normalize(b));
 
 		/// <summary> Calculates a quaternion that rotates from a to b, optimized for normalized inputs </summary>
-		public static Quaternion FromToRotationNormalized(Float3 a, Float3 b)
-		{
-			var c = new Float4(a.Cross(b), a.Dot(b) + 1f);
-			return (Quaternion)(c * Rsqrt(2f * a.Dot(b) + 2f));
-		}
+		public static Quaternion FromToRotationNormalized(Float3 a, Float3 b) => new(Rsqrt(2f * a.Dot(b) + 2f) * new Float4(a.Cross(b), a.Dot(b) + 1f));
 
 		/// <summary> Rotates a by the inverse of b </summary>
 		public readonly Quaternion InverseRotate(Quaternion a) => Inverse.Rotate(a);
@@ -414,6 +411,12 @@ namespace Unmath
 			var angularError = current.AngularError(target);
 			velocity = SpringDampVelocity(angularError, velocity, sqrtStiffness, overshoot);
 			return IntegrateVelocity(current, velocity);
+		}
+
+		public readonly RigidTransform RotateAround(RigidTransform a, Float3 pivot)
+		{
+			return RigidTransform.RotateAroundPivot(this, pivot).Transform(a);
+			//return Rotate(a).Translate(pivot - Rotate(pivot));
 		}
 	}
 }
