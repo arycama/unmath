@@ -23,10 +23,17 @@ namespace Unmath
 
 		public static implicit operator UnityEngine.Plane(Plane plane) => new(plane.normal, plane.distance);
 
+		public readonly Float3 Origin => normal * distance;
+
 		public readonly float Distance(Float3 point) => normal.Dot(point) + distance;
 
 		public readonly Float3 ClosestPoint(Float3 point) => -Distance(point) * normal + point;
 
 		public readonly float Dot(Float4 point) => normal.Dot(point.xyz) + distance * point.w;
+
+		public readonly Float3 Intersect(Float3 origin, Float3 direction, out bool isValid)
+		{
+			return Geometry.RayPlaneDistance(origin, direction, Origin, normal, out isValid);
+		}
 	}
 }

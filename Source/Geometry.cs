@@ -38,14 +38,24 @@ namespace Unmath
 			return Abs(Sqrt(discriminant) - b) * 0.5f;
 		}
 
-		public static float IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal, out bool isValid)
+		public static float RayPlaneDistance(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal, out bool isValid)
 		{
 			var denominator = planeNormal.Dot(rayDirection);
-			isValid = Abs(denominator) > 1e-6f;
-			return planeNormal.Dot(planeOrigin - rayOrigin) / denominator;
+			isValid = denominator != 0.0f;
+			return planeNormal.Dot(planeOrigin - rayOrigin) * Rcp(denominator);
 		}
 
-		public static float IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal)
+		public static float RayPlaneDistance(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal)
+		{
+			return RayPlaneDistance(rayOrigin, rayDirection, planeOrigin, planeNormal, out _);
+		}
+
+		public static Float3 IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal, out bool isValid)
+		{
+			return RayPlaneDistance(rayOrigin, rayDirection, planeOrigin, planeNormal, out isValid) * rayDirection + rayOrigin;
+		}
+
+		public static Float3 IntersectRayPlane(Float3 rayOrigin, Float3 rayDirection, Float3 planeOrigin, Float3 planeNormal)
 		{
 			return IntersectRayPlane(rayOrigin, rayDirection, planeOrigin, planeNormal, out _);
 		}
