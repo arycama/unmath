@@ -1,3 +1,5 @@
+using static Unmath.Math;
+
 namespace Unmath
 {
 	public struct Plane
@@ -33,7 +35,11 @@ namespace Unmath
 
 		public readonly Float3 Intersect(Float3 origin, Float3 direction, out bool isValid)
 		{
-			return Geometry.RayPlaneDistance(origin, direction, Origin, normal, out isValid);
+			var denominator = direction.Dot(normal);
+			isValid = denominator != 0.0f;
+			var numerator = -origin.Dot(normal) - distance;
+			var t = numerator * Rcp(denominator);
+			return origin + direction * t;
 		}
 	}
 }
